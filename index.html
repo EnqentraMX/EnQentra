@@ -1087,7 +1087,7 @@
     <button class="btn btn-primary" style="width: 100%;" onclick="createTour()">Crear Tour</button>
   </div>
 </div>
-
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 // ===== STATE =====
 let currentUser = null;
@@ -1565,8 +1565,10 @@ function randomColor() {
 }
 
 // ===== INIT =====
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  const SUPABASE_URL = 'https://iaemzeidkyxayhsiunmt.supabase.co';
+```js
+// ===== INIT =====
+
+const SUPABASE_URL = 'https://iaemzeidkyxayhsiunmt.supabase.co';
 
 const SUPABASE_KEY = 'sb_publishable_ueHRY8Ev4QO_tF8xc6voRg_boBBXWUR';
 
@@ -1574,15 +1576,21 @@ const supabaseClient = supabase.createClient(
   SUPABASE_URL,
   SUPABASE_KEY
 );
-  async function testSupabase() {
-    const { data, error } = await supabaseClient
-        .from('agencies')
-        .select('*');
 
-    console.log('SUPABASE:', data, error);
+async function testSupabase() {
+  const { data, error } = await supabaseClient
+    .from('agencies')
+    .select('*');
+
+  console.log('SUPABASE:', data, error);
 }
 
 testSupabase();
+
+loadData();
+loadHomeData();
+```
+
 
 </body>
 </html>
