@@ -371,19 +371,39 @@ function loadHome(){
 
 }
 
-function createAgency(){
+async function createAgency(){
 
-  const name = document.getElementById('agencyNameInput').value;
+  const name =
+    document.getElementById('agencyNameInput').value;
 
-  const desc = document.getElementById('agencyDescInput').value;
+  const desc =
+    document.getElementById('agencyDescInput').value;
 
-  const slug = name.toLowerCase().replace(/\s/g,'');
+  const slug =
+    name
+      .toLowerCase()
+      .replace(/\s/g,'');
 
-  agencies[slug] = {
-    name,
-    description:desc,
-    tours:[]
-  };
+  const { error } = await supabaseClient
+    .from('agencies')
+    .insert([
+      {
+        name: name,
+        description: desc,
+        slug: slug
+      }
+    ]);
+
+  if(error){
+    console.log(error);
+    alert('Error creando agencia');
+    return;
+  }
+
+  alert('Agencia creada');
+
+  await loadAgencies();
+}
 
   updateAgencySelect();
 
@@ -409,22 +429,43 @@ function updateAgencySelect(){
 
 }
 
-function createTour(){
+async function createTour(){
 
-  const slug = document.getElementById('tourAgency').value;
+  const slug =
+    document.getElementById('tourAgency').value;
 
-  const name = document.getElementById('tourName').value;
+  const name =
+    document.getElementById('tourName').value;
 
-  const image = document.getElementById('tourImage').value;
+  const image =
+    document.getElementById('tourImage').value;
 
-  const price = document.getElementById('tourPrice').value;
+  const price =
+    parseInt(
+      document.getElementById('tourPrice').value
+    );
 
-  agencies[slug].tours.push({
-    name,
-    image,
-    price
-  });
+  const { error } = await supabaseClient
+    .from('tours')
+    .insert([
+      {
+        agency_slug: slug,
+        name: name,
+        image: image,
+        price: price
+      }
+    ]);
 
+  if(error){
+    console.log(error);
+    alert('Error al guardar');
+    return;
+  }
+
+  alert('Tour guardado');
+
+  await loadAgencies();
+}
   loadHome();
 
   alert('Tour creado');
