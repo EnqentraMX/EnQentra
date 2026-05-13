@@ -405,12 +405,6 @@ async function createAgency(){
   await loadAgencies();
 }
 
-  updateAgencySelect();
-
-  alert('Agencia creada');
-
-}
-
 function updateAgencySelect(){
 
   const select = document.getElementById('tourAgency');
@@ -487,34 +481,38 @@ window.addEventListener('keydown', function(e){
 });
 
 agencies = {
+async function loadAgencies() {
 
-  elcuategarza:{
-    name:'El Cuate Garza',
-    description:'Experiencias reales en Oaxaca',
-    tours:[
-      {
-        name:'Ruta del Mezcal',
-        image:'https://images.unsplash.com/photo-1518105779142-d975f22f1b0a?q=80&w=1200',
-        price:850
-      }
-    ]
-  },
+  const { data: agenciesData } =
+    await supabaseClient
+      .from('agencies')
+      .select('*');
 
-  escapadillas:{
-    name:'Escapadillas',
-    description:'Tours premium',
-    tours:[
-      {
-        name:'Huatulco Experience',
-        image:'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1200',
-        price:2400
-      }
-    ]
-  }
+  const { data: toursData } =
+    await supabaseClient
+      .from('tours')
+      .select('*');
 
-};
+  agencies = {};
 
-loadHome();
+  agenciesData.forEach(agency => {
+
+    agencies[agency.slug] = {
+      name: agency.name,
+      description: agency.description,
+      tours: toursData.filter(
+        t => t.agency_slug === agency.slug
+      )
+    };
+
+  });
+
+  updateAgencySelect();
+
+  loadHome();
+}
+
+loadAgencies();
 
 </script>
 
