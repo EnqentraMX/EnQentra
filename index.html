@@ -1,38 +1,498 @@
+# EnQentraMX — HTML Premium conectado a Supabase
+
+```html
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Test Supabase</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EnQentraMX</title>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+:root{
+--green:#0B3B2E;
+--green2:#0E5A45;
+--gold:#E2B95B;
+--light:#F5F2EA;
+--white:#ffffff;
+--gray:#d4d4d4;
+}
+
+body{
+font-family:'DM Sans',sans-serif;
+background:var(--light);
+color:#111;
+overflow-x:hidden;
+}
+
+.container{
+width:100%;
+max-width:1200px;
+margin:auto;
+padding:0 1.5rem;
+}
+
+nav{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+background:rgba(6,33,26,0.95);
+backdrop-filter:blur(10px);
+z-index:999;
+border-bottom:1px solid rgba(255,255,255,0.05);
+}
+
+.nav-inner{
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:1rem 0;
+}
+
+.logo{
+font-family:'Playfair Display',serif;
+font-size:2rem;
+font-weight:700;
+color:white;
+}
+
+.logo span{
+color:var(--gold);
+}
+
+.menu{
+display:flex;
+gap:2rem;
+align-items:center;
+}
+
+.menu a{
+text-decoration:none;
+color:white;
+font-size:1rem;
+opacity:0.9;
+}
+
+.admin-btn{
+background:var(--gold);
+border:none;
+padding:0.8rem 1.3rem;
+border-radius:12px;
+font-weight:700;
+cursor:pointer;
+}
+
+.hero{
+min-height:100vh;
+background:
+linear-gradient(rgba(0,0,0,0.35),rgba(0,0,0,0.35)),
+linear-gradient(135deg,var(--green),#062A20);
+display:flex;
+align-items:center;
+justify-content:center;
+text-align:center;
+color:white;
+padding-top:100px;
+}
+
+.hero-content{
+max-width:1000px;
+}
+
+.hero-badge{
+display:inline-block;
+padding:0.7rem 1.3rem;
+border:1px solid rgba(255,255,255,0.15);
+border-radius:999px;
+margin-bottom:2rem;
+background:rgba(255,255,255,0.05);
+}
+
+.hero h1{
+font-family:'Playfair Display',serif;
+font-size:5rem;
+line-height:1.05;
+margin-bottom:2rem;
+}
+
+.hero h1 span{
+color:var(--gold);
+font-style:italic;
+}
+
+.hero p{
+font-size:1.3rem;
+max-width:800px;
+margin:auto;
+line-height:1.7;
+opacity:0.9;
+margin-bottom:3rem;
+}
+
+.search-box{
+display:grid;
+grid-template-columns:1fr 1fr 1fr 90px;
+background:white;
+border-radius:20px;
+overflow:hidden;
+margin-top:2rem;
+box-shadow:0 20px 40px rgba(0,0,0,0.2);
+}
+
+.search-item{
+padding:1.5rem;
+text-align:left;
+border-right:1px solid #eee;
+}
+
+.search-item small{
+display:block;
+font-size:0.8rem;
+color:#888;
+margin-bottom:0.3rem;
+text-transform:uppercase;
+}
+
+.search-item span{
+color:#111;
+font-weight:500;
+}
+
+.search-btn{
+background:#0DB28B;
+border:none;
+color:white;
+font-size:1.5rem;
+cursor:pointer;
+}
+
+.tags{
+display:flex;
+gap:1rem;
+justify-content:center;
+margin-top:2rem;
+flex-wrap:wrap;
+}
+
+.tag{
+padding:0.8rem 1.2rem;
+border-radius:999px;
+background:rgba(255,255,255,0.08);
+border:1px solid rgba(255,255,255,0.08);
+}
+
+.stats{
+background:#063D2F;
+padding:5rem 0;
+}
+
+.stats-grid{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:2rem;
+text-align:center;
+color:white;
+}
+
+.stat h2{
+font-size:4rem;
+font-family:'Playfair Display',serif;
+color:var(--gold);
+}
+
+.stat p{
+margin-top:0.7rem;
+opacity:0.8;
+text-transform:uppercase;
+letter-spacing:1px;
+}
+
+.section{
+padding:6rem 0;
+}
+
+.section-title{
+font-family:'Playfair Display',serif;
+font-size:3rem;
+margin-bottom:3rem;
+}
+
+.tours-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+gap:2rem;
+}
+
+.tour-card{
+background:white;
+border-radius:24px;
+overflow:hidden;
+box-shadow:0 15px 40px rgba(0,0,0,0.08);
+transition:0.3s;
+}
+
+.tour-card:hover{
+transform:translateY(-10px);
+}
+
+.tour-image{
+height:240px;
+background-size:cover;
+background-position:center;
+}
+
+.tour-content{
+padding:1.5rem;
+}
+
+.tour-agency{
+font-size:0.9rem;
+color:#777;
+margin-bottom:0.8rem;
+}
+
+.tour-title{
+font-size:1.6rem;
+font-weight:700;
+margin-bottom:1rem;
+}
+
+.tour-info{
+display:flex;
+justify-content:space-between;
+margin-bottom:1rem;
+}
+
+.price{
+font-size:1.5rem;
+font-weight:700;
+color:var(--green2);
+}
+
+.book-btn{
+width:100%;
+padding:1rem;
+border:none;
+background:var(--green);
+color:white;
+font-weight:700;
+border-radius:14px;
+cursor:pointer;
+}
+
+footer{
+background:#041E17;
+color:white;
+padding:4rem 0;
+text-align:center;
+}
+
+@media(max-width:900px){
+.hero h1{
+font-size:3rem;
+}
+
+.search-box{
+grid-template-columns:1fr;
+}
+
+.stats-grid{
+grid-template-columns:1fr 1fr;
+}
+
+.menu{
+display:none;
+}
+}
+</style>
 </head>
 <body>
 
-<h1>TEST</h1>
+<nav>
+<div class="container nav-inner">
+<div class="logo">EnQentra<span>MX</span></div>
+
+<div class="menu">
+<a href="#">Inicio</a>
+<a href="#tours">Destinos</a>
+<a href="#">Agencias</a>
+<button class="admin-btn">🧑 Admin</button>
+</div>
+</div>
+</nav>
+
+<section class="hero">
+<div class="container hero-content">
+
+<div class="hero-badge">✨ EXPLORA MÉXICO</div>
+
+<h1>
+Descubre <span>tours auténticos</span><br>
+en México
+</h1>
+
+<p>
+Conecta con agencias reales y vive experiencias inolvidables en los destinos más impresionantes del país.
+</p>
+
+<div class="search-box">
+<div class="search-item">
+<small>Destino</small>
+<span>¿A dónde viajas?</span>
+</div>
+
+<div class="search-item">
+<small>Fechas</small>
+<span>¿Cuándo?</span>
+</div>
+
+<div class="search-item">
+<small>Tipo</small>
+<span>Tipo de tour</span>
+</div>
+
+<button class="search-btn">🔍</button>
+</div>
+
+<div class="tags">
+<div class="tag">🏔️ Aventura</div>
+<div class="tag">🏛️ Cultura</div>
+<div class="tag">🍽️ Gastronomía</div>
+<div class="tag">🌊 Playa</div>
+</div>
+
+</div>
+</section>
+
+<section class="stats">
+<div class="container stats-grid">
+
+<div class="stat">
+<h2>5,248</h2>
+<p>Viajeros satisfechos</p>
+</div>
+
+<div class="stat">
+<h2 id="tourCount">0</h2>
+<p>Tours disponibles</p>
+</div>
+
+<div class="stat">
+<h2>4.9★</h2>
+<p>Rating promedio</p>
+</div>
+
+<div class="stat">
+<h2>45</h2>
+<p>Agencias verificadas</p>
+</div>
+
+</div>
+</section>
+
+<section class="section" id="tours">
+<div class="container">
+
+<h2 class="section-title">Tours destacados</h2>
+
+<div class="tours-grid" id="toursGrid"></div>
+
+</div>
+</section>
+
+<footer>
+<div class="container">
+<h2 class="logo">EnQentra<span>MX</span></h2>
+<br>
+<p>Explora México con experiencias reales.</p>
+</div>
+</footer>
 
 <script>
+
 const SUPABASE_URL = "https://iaemzeidkyxayhsiunmt.supabase.co";
+
 const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlhZW16ZWlka3l4YXloc2l1bm10Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg2NDcxNzcsImV4cCI6MjA5NDIyMzE3N30.5ICsYhzx5BCppUuVQBO38jAsULZsvx5NenIYznJAMtQ";
 
 const supabaseClient = supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_KEY
+SUPABASE_URL,
+SUPABASE_KEY
 );
 
-console.log("CONECTADO");
+console.log("SUPABASE CONECTADO");
 console.log(supabaseClient);
 
-async function test() {
-  const { data, error } = await supabaseClient
-    .from("agencies")
-    .select("*");
+async function loadTours(){
 
-  console.log(data);
-  console.log(error);
+const { data, error } = await supabaseClient
+.from('tours')
+.select('*');
+
+console.log(data);
+console.log(error);
+
+const grid = document.getElementById('toursGrid');
+const count = document.getElementById('tourCount');
+
+if(error){
+console.error(error);
+return;
 }
 
-test();
+count.innerText = data.length;
+
+grid.innerHTML = '';
+
+data.forEach(tour => {
+
+const card = document.createElement('div');
+card.className = 'tour-card';
+
+card.innerHTML = `
+<div class="tour-image" style="background-image:url('${tour.image || 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1200&auto=format&fit=crop'}')"></div>
+
+<div class="tour-content">
+<div class="tour-agency">${tour.agency_slug || 'Agencia'}</div>
+
+<div class="tour-title">${tour.name || 'Tour'}</div>
+
+<div class="tour-info">
+<div>${tour.duration || '2 días'}</div>
+<div>${tour.people || '10 personas'}</div>
+</div>
+
+<div class="tour-info">
+<div class="price">$${tour.price || 0}</div>
+<div>⭐ 4.9</div>
+</div>
+
+<button class="book-btn">Reservar ahora</button>
+</div>
+`;
+
+grid.appendChild(card);
+
+});
+
+}
+
+loadTours();
+
 </script>
 
 </body>
 </html>
+```
