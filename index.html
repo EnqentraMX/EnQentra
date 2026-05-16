@@ -147,6 +147,8 @@
     .agency-item-tours { font-size: 12px; color: var(--ts); }
     .btn-delete { background: #EF4444; color: white; padding: 6px 12px; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; }
     .btn-delete:hover { background: #DC2626; }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
 
     .stats-band { background:#0F3D28; padding:3rem 0; }
     .stats-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:2rem; text-align:center; }
@@ -582,103 +584,208 @@
   <div class="admin-content">
     <span class="admin-close" id="closeAdmin">&times;</span>
     <h2>Panel Administrativo</h2>
-    <p style="color: var(--ts); font-size: 13px; margin-top: 0.5rem;">Gestiona las agencias y sus imágenes</p>
+    <p style="color: var(--ts); font-size: 13px; margin-top: 0.5rem;">Gestiona agencias y tours</p>
     
-    <div class="admin-form">
-      <h3 style="margin-bottom: 1rem; font-size: 16px;">Agregar Agencia</h3>
+    <!-- TABS -->
+    <div style="display: flex; gap: 1rem; margin: 1.5rem 0; border-bottom: 1px solid var(--bd); padding-bottom: 1rem;">
+      <button class="tab-btn active" data-tab="agencies" style="background: none; border: none; padding: 0; cursor: pointer; font-weight: 600; color: var(--v); border-bottom: 2px solid var(--v); padding-bottom: 0.5rem;">Agencias</button>
+      <button class="tab-btn" data-tab="tours" style="background: none; border: none; padding: 0; cursor: pointer; font-weight: 600; color: var(--ts);">Tours</button>
+    </div>
+
+    <!-- TAB AGENCIAS -->
+    <div class="tab-content active" id="agencies-tab">
+      <h3 style="margin-bottom: 1rem; font-size: 16px;">Agregar/Editar Agencia</h3>
       <form id="agencyForm">
         <div class="form-group">
           <label>Nombre de la Agencia</label>
           <input type="text" id="agencyName" required placeholder="Ej: El Cuate Garza">
         </div>
         <div class="form-group">
-          <label>URL de la Foto/Logo</label>
-          <input type="url" id="agencyImage" required placeholder="https://ejemplo.com/foto.jpg">
+          <label>Logo (URL)</label>
+          <input type="url" id="agencyLogo" required placeholder="https://ejemplo.com/logo.jpg">
         </div>
         <div class="form-group">
-          <label>Número de Tours</label>
-          <input type="number" id="agencyTours" required min="1" placeholder="8">
+          <label>Foto de Portada (URL)</label>
+          <input type="url" id="agencyCover" placeholder="https://ejemplo.com/portada.jpg">
+        </div>
+        <div class="form-group">
+          <label>Descripción</label>
+          <textarea id="agencyDescription" placeholder="Describe tu agencia..."></textarea>
+        </div>
+        <div class="form-group">
+          <label>Whatsapp (con código de país: 52...)</label>
+          <input type="text" id="agencyWhatsapp" placeholder="521234567890">
+        </div>
+        <div class="form-group">
+          <label>Facebook</label>
+          <input type="url" id="agencyFacebook" placeholder="https://facebook.com/tuagencia">
         </div>
         <div class="form-actions">
-          <button type="submit" class="form-actions button btn-save">Guardar Agencia</button>
-          <button type="button" class="form-actions button btn-cancel" id="cancelForm">Cancelar</button>
+          <button type="submit" class="btn-save">Guardar Agencia</button>
+          <button type="button" class="btn-cancel" onclick="resetAgencyForm()">Cancelar</button>
         </div>
       </form>
+
+      <div class="agency-list">
+        <h3 style="margin-bottom: 1rem; font-size: 16px; margin-top: 2rem;">Agencias Guardadas</h3>
+        <div id="agenciesList"></div>
+      </div>
     </div>
 
-    <div class="agency-list">
-      <h3 style="margin-bottom: 1rem; font-size: 16px;">Agencias Guardadas</h3>
-      <div id="agenciesList"></div>
+    <!-- TAB TOURS -->
+    <div class="tab-content" id="tours-tab">
+      <h3 style="margin-bottom: 1rem; font-size: 16px;">Agregar/Editar Tour</h3>
+      <form id="tourForm">
+        <div class="form-group">
+          <label>Nombre del Tour</label>
+          <input type="text" id="tourName" required placeholder="Ej: Cenotes de Tulum">
+        </div>
+        <div class="form-group">
+          <label>Agencia</label>
+          <select id="tourAgency" required>
+            <option value="">Selecciona una agencia</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Descripción</label>
+          <textarea id="tourDescription" placeholder="Describe el tour..."></textarea>
+        </div>
+        <div class="form-group">
+          <label>Foto del Tour (URL)</label>
+          <input type="url" id="tourImage" required placeholder="https://ejemplo.com/tour.jpg">
+        </div>
+        <div class="form-group">
+          <label>Precio (por persona)</label>
+          <input type="number" id="tourPrice" required min="0" placeholder="1800">
+        </div>
+        <div class="form-group">
+          <label>Duración</label>
+          <input type="text" id="tourDuration" placeholder="Ej: 3 días">
+        </div>
+        <div class="form-group">
+          <label>Capacidad (personas)</label>
+          <input type="number" id="tourCapacity" min="1" placeholder="10">
+        </div>
+        <div class="form-group">
+          <label>Estado</label>
+          <select id="tourState" required>
+            <option value="">Selecciona un estado</option>
+            <option value="Oaxaca">Oaxaca</option>
+            <option value="Chiapas">Chiapas</option>
+            <option value="Yucatán">Yucatán</option>
+            <option value="CDMX">CDMX</option>
+            <option value="Baja California">Baja California</option>
+            <option value="Quintana Roo">Quintana Roo</option>
+            <option value="Guanajuato">Guanajuato</option>
+            <option value="Jalisco">Jalisco</option>
+            <option value="Puebla">Puebla</option>
+            <option value="Otro">Otro</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Badge/Categoría</label>
+          <input type="text" id="tourBadge" placeholder="Ej: Aventura, Cultura, Naturaleza">
+        </div>
+        <div class="form-group">
+          <label>Rating</label>
+          <input type="number" id="tourRating" min="0" max="5" step="0.1" placeholder="4.9">
+        </div>
+        <div class="form-group">
+          <label>Número de Reseñas</label>
+          <input type="number" id="tourReviews" min="0" placeholder="42">
+        </div>
+        <div class="form-group">
+          <label>
+            <input type="checkbox" id="tourFeatured"> Destacado
+          </label>
+        </div>
+        <div class="form-group">
+          <label>
+            <input type="checkbox" id="tourComingSoon"> Próximo Viaje
+          </label>
+        </div>
+        <div class="form-group">
+          <label>
+            <input type="checkbox" id="tourVisible"> Visible en inicio
+          </label>
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn-save">Guardar Tour</button>
+          <button type="button" class="btn-cancel" onclick="resetTourForm()">Cancelar</button>
+        </div>
+      </form>
+
+      <div style="margin-top: 2rem;">
+        <h3 style="margin-bottom: 1rem; font-size: 16px;">Tours Guardados</h3>
+        <div id="toursList"></div>
+      </div>
     </div>
   </div>
 </div>
 
 <script>
-// Configuración Supabase
+// ===== CONFIGURACIÓN SUPABASE =====
 const SUPABASE_URL = "https://iaemzeidkyxayhsiunmt.supabase.co";
 const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlhZW16ZWlka3l4YXloc2l1bm10Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg2NDcxNzcsImV4cCI6MjA5NDIyMzE3N30.5ICsYhzx5BCppUuVQBO38jAsULZsvx5NenIYznJAMtQ";
-
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 let agencies = [];
+let tours = [];
+let editingAgencyId = null;
+let editingTourId = null;
 
-// Event Listeners
-document.getElementById('adminBtn').addEventListener('click', () => {
-  document.getElementById('adminModal').classList.add('active');
-  loadAgencies();
+// ===== INIT =====
+document.addEventListener('DOMContentLoaded', () => {
+  setupTabs();
+  setupEventListeners();
+  document.getElementById('adminBtn').addEventListener('click', openAdmin);
+  document.getElementById('closeAdmin').addEventListener('click', closeAdmin);
 });
 
-document.getElementById('closeAdmin').addEventListener('click', () => {
-  document.getElementById('adminModal').classList.remove('active');
-});
+// ===== TABS =====
+function setupTabs() {
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      const tab = e.target.dataset.tab;
+      document.querySelectorAll('.tab-btn').forEach(b => {
+        b.style.color = 'var(--ts)';
+        b.style.borderBottom = 'none';
+        b.style.paddingBottom = '0.5rem';
+      });
+      e.target.style.color = 'var(--v)';
+      e.target.style.borderBottom = '2px solid var(--v)';
+      
+      document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
+      document.getElementById(tab + '-tab').classList.add('active');
+      
+      if (tab === 'tours') loadTours();
+      if (tab === 'agencies') loadAgencies();
+    });
+  });
+}
 
-document.getElementById('cancelForm').addEventListener('click', () => {
-  document.getElementById('agencyForm').reset();
-});
+function setupEventListeners() {
+  document.getElementById('agencyForm').addEventListener('submit', saveAgency);
+  document.getElementById('tourForm').addEventListener('submit', saveTour);
+}
 
-document.getElementById('agencyForm').addEventListener('submit', async (e) => {
-  e.preventDefault();
-  
-  const agencyData = {
-    name: document.getElementById('agencyName').value,
-    logo: document.getElementById('agencyImage').value,
-    tours: parseInt(document.getElementById('agencyTours').value),
-    created_at: new Date().toISOString()
-  };
-
-  try {
-    const { data, error } = await supabaseClient
-      .from('agencies')
-      .insert([agencyData]);
-
-    if (error) throw error;
-    
-    console.log('✅ Agencia guardada en Supabase:', agencyData);
-    document.getElementById('agencyForm').reset();
-    loadAgencies();
-  } catch (error) {
-    console.error('Error:', error);
-    alert('Error al guardar: ' + error.message);
-  }
-});
-
-// Cargar agencias
+// ===== AGENCIAS =====
 async function loadAgencies() {
   try {
     const { data, error } = await supabaseClient
       .from('agencies')
-      .select('*');
-
+      .select('*')
+      .order('id', { ascending: false });
+    
     if (error) throw error;
-
     agencies = data || [];
     renderAgencies();
+    loadAgenciesDropdown();
   } catch (error) {
     console.error('Error cargando agencias:', error);
   }
 }
 
-// Renderizar agencias
 function renderAgencies() {
   const list = document.getElementById('agenciesList');
   
@@ -692,38 +799,244 @@ function renderAgencies() {
       <img src="${agency.logo}" alt="${agency.name}" onerror="this.src='https://placehold.co/60x60'">
       <div class="agency-item-info">
         <div class="agency-item-name">${agency.name}</div>
-        <div class="agency-item-tours">${agency.tours} tours</div>
+        <div class="agency-item-tours">${agency.state || 'Múltiples estados'}</div>
       </div>
-      <button class="btn-delete" onclick="deleteAgency(${agency.id})">Eliminar</button>
+      <div style="display: flex; gap: 5px;">
+        <button class="btn-delete" style="padding: 4px 10px; font-size: 11px;" onclick="editAgency(${agency.id})">Editar</button>
+        <button class="btn-delete" onclick="deleteAgency(${agency.id})">Eliminar</button>
+      </div>
     </div>
   `).join('');
 }
 
-// Eliminar agencia
+function loadAgenciesDropdown() {
+  const select = document.getElementById('tourAgency');
+  select.innerHTML = '<option value="">Selecciona una agencia</option>';
+  agencies.forEach(agency => {
+    const option = document.createElement('option');
+    option.value = agency.id;
+    option.textContent = agency.name;
+    select.appendChild(option);
+  });
+}
+
+async function saveAgency(e) {
+  e.preventDefault();
+  
+  const agencyData = {
+    name: document.getElementById('agencyName').value,
+    logo: document.getElementById('agencyLogo').value,
+    cover: document.getElementById('agencyCover').value,
+    description: document.getElementById('agencyDescription').value,
+    whatsapp: document.getElementById('agencyWhatsapp').value,
+    facebook: document.getElementById('agencyFacebook').value,
+  };
+
+  try {
+    if (editingAgencyId) {
+      const { error } = await supabaseClient
+        .from('agencies')
+        .update(agencyData)
+        .eq('id', editingAgencyId);
+      if (error) throw error;
+      console.log('✅ Agencia actualizada');
+    } else {
+      const { error } = await supabaseClient
+        .from('agencies')
+        .insert([agencyData]);
+      if (error) throw error;
+      console.log('✅ Agencia creada');
+    }
+    
+    resetAgencyForm();
+    loadAgencies();
+  } catch (error) {
+    console.error('Error:', error);
+    alert('Error: ' + error.message);
+  }
+}
+
+async function editAgency(id) {
+  const agency = agencies.find(a => a.id === id);
+  if (!agency) return;
+  
+  editingAgencyId = id;
+  document.getElementById('agencyName').value = agency.name;
+  document.getElementById('agencyLogo').value = agency.logo;
+  document.getElementById('agencyCover').value = agency.cover || '';
+  document.getElementById('agencyDescription').value = agency.description || '';
+  document.getElementById('agencyWhatsapp').value = agency.whatsapp || '';
+  document.getElementById('agencyFacebook').value = agency.facebook || '';
+  
+  document.querySelector('[data-tab="agencies"]').click();
+}
+
+function resetAgencyForm() {
+  document.getElementById('agencyForm').reset();
+  editingAgencyId = null;
+}
+
 async function deleteAgency(id) {
   if (!confirm('¿Eliminar esta agencia?')) return;
-
+  
   try {
     const { error } = await supabaseClient
       .from('agencies')
       .delete()
       .eq('id', id);
-
     if (error) throw error;
-    
     console.log('✅ Agencia eliminada');
     loadAgencies();
   } catch (error) {
     console.error('Error:', error);
-    alert('Error al eliminar: ' + error.message);
+    alert('Error: ' + error.message);
   }
 }
 
-// Cerrar modal al hacer click fuera
-document.getElementById('adminModal').addEventListener('click', (e) => {
-  if (e.target.id === 'adminModal') {
-    document.getElementById('adminModal').classList.remove('active');
+// ===== TOURS =====
+async function loadTours() {
+  try {
+    const { data, error } = await supabaseClient
+      .from('tours')
+      .select('*')
+      .order('id', { ascending: false });
+    
+    if (error) throw error;
+    tours = data || [];
+    renderTours();
+  } catch (error) {
+    console.error('Error cargando tours:', error);
   }
+}
+
+function renderTours() {
+  const list = document.getElementById('toursList');
+  
+  if (tours.length === 0) {
+    list.innerHTML = '<p style="color: var(--ts); font-size: 13px;">No hay tours aún</p>';
+    return;
+  }
+
+  list.innerHTML = tours.map(tour => {
+    const agency = agencies.find(a => a.id === tour.agency_id);
+    return `
+      <div class="agency-item">
+        <img src="${tour.image}" alt="${tour.name}" onerror="this.src='https://placehold.co/60x60'">
+        <div class="agency-item-info">
+          <div class="agency-item-name">${tour.name}</div>
+          <div class="agency-item-tours">${agency?.name || 'Sin agencia'} • $${tour.price} • ${tour.state}</div>
+        </div>
+        <div style="display: flex; gap: 5px;">
+          <button class="btn-delete" style="padding: 4px 10px; font-size: 11px;" onclick="editTour(${tour.id})">Editar</button>
+          <button class="btn-delete" onclick="deleteTour(${tour.id})">Eliminar</button>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+async function saveTour(e) {
+  e.preventDefault();
+  
+  const tourData = {
+    name: document.getElementById('tourName').value,
+    agency_id: parseInt(document.getElementById('tourAgency').value),
+    description: document.getElementById('tourDescription').value,
+    image: document.getElementById('tourImage').value,
+    price: parseInt(document.getElementById('tourPrice').value),
+    duration: document.getElementById('tourDuration').value,
+    capacity: parseInt(document.getElementById('tourCapacity').value) || 10,
+    state: document.getElementById('tourState').value,
+    badge: document.getElementById('tourBadge').value,
+    rating: parseFloat(document.getElementById('tourRating').value) || 4.9,
+    reviews: parseInt(document.getElementById('tourReviews').value) || 0,
+    featured: document.getElementById('tourFeatured').checked,
+    coming_soon: document.getElementById('tourComingSoon').checked,
+    visible: document.getElementById('tourVisible').checked,
+  };
+
+  try {
+    if (editingTourId) {
+      const { error } = await supabaseClient
+        .from('tours')
+        .update(tourData)
+        .eq('id', editingTourId);
+      if (error) throw error;
+      console.log('✅ Tour actualizado');
+    } else {
+      const { error } = await supabaseClient
+        .from('tours')
+        .insert([tourData]);
+      if (error) throw error;
+      console.log('✅ Tour creado');
+    }
+    
+    resetTourForm();
+    loadTours();
+  } catch (error) {
+    console.error('Error:', error);
+    alert('Error: ' + error.message);
+  }
+}
+
+async function editTour(id) {
+  const tour = tours.find(t => t.id === id);
+  if (!tour) return;
+  
+  editingTourId = id;
+  document.getElementById('tourName').value = tour.name;
+  document.getElementById('tourAgency').value = tour.agency_id;
+  document.getElementById('tourDescription').value = tour.description || '';
+  document.getElementById('tourImage').value = tour.image;
+  document.getElementById('tourPrice').value = tour.price;
+  document.getElementById('tourDuration').value = tour.duration || '';
+  document.getElementById('tourCapacity').value = tour.capacity || 10;
+  document.getElementById('tourState').value = tour.state;
+  document.getElementById('tourBadge').value = tour.badge || '';
+  document.getElementById('tourRating').value = tour.rating || 4.9;
+  document.getElementById('tourReviews').value = tour.reviews || 0;
+  document.getElementById('tourFeatured').checked = tour.featured || false;
+  document.getElementById('tourComingSoon').checked = tour.coming_soon || false;
+  document.getElementById('tourVisible').checked = tour.visible !== false;
+  
+  document.querySelector('[data-tab="tours"]').click();
+}
+
+function resetTourForm() {
+  document.getElementById('tourForm').reset();
+  editingTourId = null;
+}
+
+async function deleteTour(id) {
+  if (!confirm('¿Eliminar este tour?')) return;
+  
+  try {
+    const { error } = await supabaseClient
+      .from('tours')
+      .delete()
+      .eq('id', id);
+    if (error) throw error;
+    console.log('✅ Tour eliminado');
+    loadTours();
+  } catch (error) {
+    console.error('Error:', error);
+    alert('Error: ' + error.message);
+  }
+}
+
+// ===== MODAL CONTROL =====
+function openAdmin() {
+  document.getElementById('adminModal').classList.add('active');
+  loadAgencies();
+  loadTours();
+}
+
+function closeAdmin() {
+  document.getElementById('adminModal').classList.remove('active');
+}
+
+document.getElementById('adminModal').addEventListener('click', (e) => {
+  if (e.target.id === 'adminModal') closeAdmin();
 });
 </script>
 
