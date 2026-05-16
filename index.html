@@ -12,8 +12,27 @@
 
 <title>EnQentraMX</title>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm" type="module"></script>
-<style>
+<script type="module">
+
+import { createClient }
+from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+
+const SUPABASE_URL =
+'https://iaemzeidkyxayhsiunmt.supabase.co';
+
+const SUPABASE_KEY =
+'sb_publishable_ueHRY8Ev4QO_tF8xc6voRg_boBBXWUR';
+
+const supabaseClient = createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+window.supabaseClient = supabaseClient;
+
+console.log('SUPABASE REALMENTE CONECTADO');
+
+</script><style>
 
 *{
   margin:0;
