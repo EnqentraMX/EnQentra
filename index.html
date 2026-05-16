@@ -8,9 +8,25 @@
 <meta
   name="viewport"
   content="width=device-width, initial-scale=1.0"
->
+/>
 
 <title>EnQentraMX</title>
+
+<link
+  rel="preconnect"
+  href="https://fonts.googleapis.com"
+/>
+
+<link
+  rel="preconnect"
+  href="https://fonts.gstatic.com"
+  crossorigin
+/>
+
+<link
+  href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500;600&display=swap"
+  rel="stylesheet"
+/>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -22,180 +38,335 @@
   box-sizing:border-box;
 }
 
+:root{
+  --green:#0d3b2f;
+  --green2:#14532d;
+  --gold:#d4af37;
+  --bg:#f7f5ef;
+  --white:#ffffff;
+  --text:#111111;
+}
+
 body{
-  font-family:Arial, Helvetica, sans-serif;
-  background:#081c15;
-  color:white;
+  font-family:'Inter',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  overflow-x:hidden;
+}
+
+html{
+  scroll-behavior:smooth;
 }
 
 nav{
   width:100%;
-  padding:20px 40px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  background:#0b2a21;
-  position:sticky;
+  position:fixed;
   top:0;
   z-index:999;
+  background:rgba(8,28,21,.92);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid rgba(255,255,255,.08);
+}
+
+.nav-container{
+  width:92%;
+  max-width:1300px;
+  margin:auto;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:18px 0;
 }
 
 .logo{
-  font-size:32px;
-  font-weight:bold;
+  font-size:42px;
+  font-family:'Playfair Display',serif;
+  color:white;
   cursor:pointer;
 }
 
 .logo span{
-  color:#d4af37;
+  color:var(--gold);
 }
 
-.menu{
+.nav-links{
   display:flex;
-  gap:20px;
+  gap:35px;
 }
 
-.menu a{
+.nav-links a{
   color:white;
   text-decoration:none;
+  font-size:15px;
+  cursor:pointer;
+  opacity:.9;
+  transition:.2s;
+}
+
+.nav-links a:hover{
+  color:var(--gold);
+}
+
+.admin-btn{
+  background:var(--gold);
+  color:#111;
+  border:none;
+  padding:12px 22px;
+  border-radius:14px;
+  font-weight:600;
   cursor:pointer;
 }
 
 .hero{
-  padding:100px 20px;
+  min-height:100vh;
+  background:
+  linear-gradient(
+    rgba(4,19,15,.72),
+    rgba(4,19,15,.82)
+  ),
+  url('https://images.unsplash.com/photo-1512813195386-6cf811ad3542?q=80&w=1400&auto=format&fit=crop');
+  background-size:cover;
+  background-position:center;
+  display:flex;
+  align-items:center;
+  justify-content:center;
   text-align:center;
-  background:linear-gradient(
-    180deg,
-    #0b2a21,
-    #14532d
-  );
+  padding:140px 20px 100px;
+}
+
+.hero-content{
+  max-width:950px;
+}
+
+.hero-badge{
+  display:inline-block;
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.12);
+  color:#d7d7d7;
+  padding:12px 24px;
+  border-radius:40px;
+  margin-bottom:30px;
+  font-size:14px;
+  backdrop-filter:blur(10px);
 }
 
 .hero h1{
-  font-size:58px;
-  margin-bottom:20px;
+  font-size:92px;
+  line-height:1;
+  color:white;
+  font-family:'Playfair Display',serif;
+  margin-bottom:28px;
 }
 
 .hero h1 span{
-  color:#d4af37;
+  color:var(--gold);
+  font-style:italic;
 }
 
 .hero p{
-  max-width:700px;
+  max-width:800px;
   margin:auto;
-  font-size:18px;
-  opacity:.85;
+  color:#d7d7d7;
+  font-size:22px;
+  line-height:1.6;
 }
 
 .container{
-  width:90%;
-  max-width:1200px;
+  width:92%;
+  max-width:1300px;
   margin:auto;
 }
 
 .section-title{
-  font-size:36px;
-  margin:60px 0 30px;
+  font-size:58px;
+  margin-bottom:50px;
+  font-family:'Playfair Display',serif;
+  color:#101010;
 }
 
-.tours-grid{
-  display:grid;
-  grid-template-columns:
-    repeat(auto-fit,minmax(300px,1fr));
-  gap:20px;
-  margin-bottom:80px;
-}
-
-.tour-card{
-  background:white;
-  color:black;
-  border-radius:18px;
-  overflow:hidden;
-  cursor:pointer;
-  transition:.2s;
-}
-
-.tour-card:hover{
-  transform:translateY(-5px);
-}
-
-.tour-card img{
-  width:100%;
-  height:220px;
-  object-fit:cover;
-  background:#ddd;
-}
-
-.tour-content{
-  padding:20px;
-}
-
-.tour-content h3{
-  margin-bottom:10px;
-}
-
-.agency-label{
-  color:#14532d;
-  font-weight:bold;
-  margin-bottom:10px;
-}
-
-.price{
-  font-size:26px;
-  font-weight:bold;
-  color:#14532d;
-  margin-top:15px;
-}
-
-.btn{
-  margin-top:15px;
-  border:none;
-  background:#14532d;
-  color:white;
-  padding:12px 18px;
-  border-radius:10px;
-  cursor:pointer;
+.section-sub{
+  color:var(--green2);
+  font-size:14px;
+  letter-spacing:3px;
+  text-transform:uppercase;
+  margin-bottom:18px;
 }
 
 .section{
   display:none;
 }
 
-.active{
+.section.active{
   display:block;
 }
 
-.agency-header{
-  background:#14532d;
-  padding:80px 20px;
+.tours-section{
+  padding:100px 0;
 }
 
-.agency-header h1{
-  font-size:52px;
-  margin-bottom:10px;
+.tours-grid{
+  display:grid;
+  grid-template-columns:
+  repeat(auto-fit,minmax(340px,1fr));
+  gap:30px;
 }
 
-.admin-panel{
-  padding:40px 20px;
+.tour-card{
+  background:white;
+  border-radius:26px;
+  overflow:hidden;
+  box-shadow:
+  0 10px 40px rgba(0,0,0,.08);
+  transition:.25s;
+  cursor:pointer;
+}
+
+.tour-card:hover{
+  transform:translateY(-8px);
+}
+
+.tour-image{
+  width:100%;
+  height:260px;
+  object-fit:cover;
+  background:#ddd;
+}
+
+.tour-content{
+  padding:28px;
+}
+
+.agency-name{
+  color:var(--green2);
+  font-size:14px;
+  font-weight:700;
+  margin-bottom:14px;
+  text-transform:uppercase;
+}
+
+.tour-title{
+  font-size:34px;
+  line-height:1.1;
+  margin-bottom:18px;
+  font-family:'Playfair Display',serif;
+}
+
+.tour-price{
+  font-size:36px;
+  font-weight:800;
+  color:var(--green2);
+  margin-bottom:18px;
+}
+
+.card-btn{
+  width:100%;
+  border:none;
+  background:var(--green2);
+  color:white;
+  padding:16px;
+  border-radius:14px;
+  cursor:pointer;
+  font-size:15px;
+  font-weight:600;
+}
+
+.agency-hero{
+  background:
+  linear-gradient(
+    rgba(0,0,0,.65),
+    rgba(0,0,0,.7)
+  ),
+  url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1400&auto=format&fit=crop');
+  background-size:cover;
+  background-position:center;
+  padding:180px 20px 100px;
+  color:white;
+}
+
+.agency-hero h1{
+  font-size:74px;
+  font-family:'Playfair Display',serif;
+  margin-bottom:18px;
+}
+
+.agency-hero p{
+  max-width:700px;
+  line-height:1.7;
+  color:#ddd;
+  font-size:18px;
+}
+
+.admin-section{
+  padding:140px 0 80px;
 }
 
 .admin-box{
   background:white;
-  color:black;
-  border-radius:16px;
-  padding:20px;
+  padding:35px;
+  border-radius:24px;
   margin-bottom:30px;
+  box-shadow:
+  0 10px 40px rgba(0,0,0,.08);
+}
+
+.admin-box h2{
+  margin-bottom:24px;
+  font-size:36px;
+  font-family:'Playfair Display',serif;
 }
 
 input,
 textarea,
 select{
   width:100%;
-  padding:14px;
-  border-radius:10px;
-  border:1px solid #ccc;
-  margin-top:10px;
-  margin-bottom:20px;
+  border:1px solid #ddd;
+  border-radius:14px;
+  padding:16px;
+  margin-bottom:18px;
+  font-size:15px;
+  outline:none;
+}
+
+textarea{
+  resize:none;
+  min-height:120px;
+}
+
+.primary-btn{
+  background:var(--green2);
+  color:white;
+  border:none;
+  padding:16px 24px;
+  border-radius:14px;
+  cursor:pointer;
+  font-weight:600;
+}
+
+.footer{
+  background:#081c15;
+  color:white;
+  padding:60px 20px;
+  text-align:center;
+}
+
+@media(max-width:900px){
+
+.hero h1{
+  font-size:58px;
+}
+
+.section-title{
+  font-size:42px;
+}
+
+.agency-hero h1{
+  font-size:52px;
+}
+
+.nav-links{
+  display:none;
+}
+
 }
 
 </style>
@@ -206,6 +377,8 @@ select{
 
 <nav>
 
+<div class="nav-container">
+
 <div
   class="logo"
   onclick="goHome()"
@@ -213,11 +386,22 @@ select{
   EnQentra<span>MX</span>
 </div>
 
-<div class="menu">
+<div class="nav-links">
 
-  <a onclick="goHome()">
-    Inicio
-  </a>
+<a onclick="goHome()">Inicio</a>
+
+<a onclick="goHome()">Destinos</a>
+
+<a onclick="goHome()">Agencias</a>
+
+</div>
+
+<button
+  class="admin-btn"
+  onclick="showSection('adminPanel')"
+>
+  Admin
+</button>
 
 </div>
 
@@ -227,144 +411,181 @@ select{
 
 <!-- HOME -->
 
-<div
+<section
   id="home"
   class="section active"
 >
 
 <div class="hero">
 
-  <h1>
-    Descubre
-    <span>tours auténticos</span>
-  </h1>
+<div class="hero-content">
 
-  <p>
-    Conecta con agencias reales y descubre
-    experiencias increíbles en México.
-  </p>
+<div class="hero-badge">
+✨ EXPERIENCIAS AUTÉNTICAS EN MÉXICO
+</div>
+
+<h1>
+Descubre
+<span>tours auténticos</span>
+en México
+</h1>
+
+<p>
+Conecta con agencias reales y vive
+experiencias inmersivas en los destinos
+más increíbles del país.
+</p>
 
 </div>
+
+</div>
+
+
+
+<div class="tours-section">
 
 <div class="container">
 
-  <h2 class="section-title">
-    Tours destacados
-  </h2>
+<div class="section-sub">
+LO MÁS VENDIDO
+</div>
 
-  <div
-    class="tours-grid"
-    id="toursGrid"
-  ></div>
+<h2 class="section-title">
+Tours destacados
+</h2>
+
+<div
+  class="tours-grid"
+  id="toursGrid"
+></div>
 
 </div>
 
 </div>
+
+</section>
 
 
 
 <!-- AGENCY -->
 
-<div
+<section
   id="agencyPage"
   class="section"
 >
 
-<div class="agency-header">
-
-  <div class="container">
-
-    <h1 id="agencyName"></h1>
-
-    <p id="agencyDesc"></p>
-
-  </div>
-
-</div>
+<div class="agency-hero">
 
 <div class="container">
 
-  <div
-    class="tours-grid"
-    id="agencyTours"
-    style="margin-top:40px;"
-  ></div>
+<h1 id="agencyName"></h1>
+
+<p id="agencyDesc"></p>
 
 </div>
 
 </div>
+
+<div class="tours-section">
+
+<div class="container">
+
+<div
+  class="tours-grid"
+  id="agencyTours"
+></div>
+
+</div>
+
+</div>
+
+</section>
 
 
 
 <!-- ADMIN -->
 
-<div
+<section
   id="adminPanel"
   class="section"
 >
 
-<div class="container admin-panel">
+<div class="container admin-section">
 
-  <div class="admin-box">
+<div class="admin-box">
 
-    <h2>Crear Agencia</h2>
+<h2>
+Crear Agencia
+</h2>
 
-    <input
-      type="text"
-      id="agencyNameInput"
-      placeholder="Nombre agencia"
-    >
+<input
+  type="text"
+  id="agencyNameInput"
+  placeholder="Nombre agencia"
+/>
 
-    <textarea
-      id="agencyDescInput"
-      placeholder="Descripción"
-    ></textarea>
+<textarea
+  id="agencyDescInput"
+  placeholder="Descripción"
+></textarea>
 
-    <button
-      class="btn"
-      onclick="createAgency()"
-    >
-      Crear Agencia
-    </button>
-
-  </div>
-
-
-
-  <div class="admin-box">
-
-    <h2>Crear Tour</h2>
-
-    <select id="tourAgency"></select>
-
-    <input
-      type="text"
-      id="tourName"
-      placeholder="Nombre tour"
-    >
-
-    <input
-      type="text"
-      id="tourImage"
-      placeholder="URL imagen"
-    >
-
-    <input
-      type="number"
-      id="tourPrice"
-      placeholder="Precio"
-    >
-
-    <button
-      class="btn"
-      onclick="createTour()"
-    >
-      Crear Tour
-    </button>
-
-  </div>
+<button
+  class="primary-btn"
+  onclick="createAgency()"
+>
+Crear Agencia
+</button>
 
 </div>
+
+
+
+<div class="admin-box">
+
+<h2>
+Crear Tour
+</h2>
+
+<select id="tourAgency"></select>
+
+<input
+  type="text"
+  id="tourName"
+  placeholder="Nombre tour"
+/>
+
+<input
+  type="text"
+  id="tourImage"
+  placeholder="URL imagen"
+/>
+
+<input
+  type="number"
+  id="tourPrice"
+  placeholder="Precio"
+/>
+
+<button
+  class="primary-btn"
+  onclick="createTour()"
+>
+Crear Tour
+</button>
+
+</div>
+
+</div>
+
+</section>
+
+
+
+<div class="footer">
+
+<p>
+EnQentraMX © 2026
+</p>
 
 </div>
 
@@ -380,7 +601,8 @@ const SUPABASE_KEY =
 
 const { createClient } = supabase;
 
-const supabaseClient = createClient(
+const supabaseClient =
+createClient(
   SUPABASE_URL,
   SUPABASE_KEY
 );
@@ -393,15 +615,19 @@ let agencies = {};
 
 function showSection(id){
 
-  document
-    .querySelectorAll('.section')
-    .forEach(section=>{
-      section.classList.remove('active');
-    });
+document
+.querySelectorAll('.section')
+.forEach(section=>{
 
-  document
-    .getElementById(id)
-    .classList.add('active');
+section.classList.remove('active');
+
+});
+
+document
+.getElementById(id)
+.classList.add('active');
+
+window.scrollTo(0,0);
 
 }
 
@@ -409,9 +635,9 @@ function showSection(id){
 
 function goHome(){
 
-  showSection('home');
+showSection('home');
 
-  loadHome();
+loadHome();
 
 }
 
@@ -419,51 +645,62 @@ function goHome(){
 
 function openAgency(slug){
 
-  const agency = agencies[slug];
+const agency = agencies[slug];
 
-  if(!agency) return;
+if(!agency) return;
 
-  showSection('agencyPage');
+showSection('agencyPage');
 
-  document
-    .getElementById('agencyName')
-    .textContent = agency.name;
+document
+.getElementById('agencyName')
+.textContent = agency.name;
 
-  document
-    .getElementById('agencyDesc')
-    .textContent =
-      agency.description || '';
+document
+.getElementById('agencyDesc')
+.textContent =
+agency.description || '';
 
-  const grid =
-    document.getElementById('agencyTours');
+const grid =
+document.getElementById('agencyTours');
 
-  grid.innerHTML = '';
+grid.innerHTML = '';
 
-  agency.tours.forEach(tour=>{
+agency.tours.forEach(tour=>{
 
-    grid.innerHTML += `
+grid.innerHTML += `
 
-      <div class="tour-card">
+<div class="tour-card">
 
-        <img
-          src="${tour.image}"
-        >
+<img
+class="tour-image"
+src="${tour.image}"
+>
 
-        <div class="tour-content">
+<div class="tour-content">
 
-          <h3>${tour.name}</h3>
+<div class="agency-name">
+${agency.name}
+</div>
 
-          <div class="price">
-            $${tour.price}
-          </div>
+<h3 class="tour-title">
+${tour.name}
+</h3>
 
-        </div>
+<div class="tour-price">
+$${tour.price}
+</div>
 
-      </div>
+<button class="card-btn">
+Reservar
+</button>
 
-    `;
+</div>
 
-  });
+</div>
+
+`;
+
+});
 
 }
 
@@ -471,53 +708,56 @@ function openAgency(slug){
 
 function loadHome(){
 
-  const grid =
-    document.getElementById('toursGrid');
+const grid =
+document.getElementById('toursGrid');
 
-  grid.innerHTML = '';
+grid.innerHTML = '';
 
-  Object.keys(agencies).forEach(slug=>{
+Object.keys(agencies).forEach(slug=>{
 
-    const agency = agencies[slug];
+const agency = agencies[slug];
 
-    agency.tours.forEach(tour=>{
+agency.tours.forEach(tour=>{
 
-      grid.innerHTML += `
+grid.innerHTML += `
 
-        <div
-          class="tour-card"
-          onclick="openAgency('${slug}')"
-        >
+<div
+class="tour-card"
+onclick="openAgency('${slug}')"
+>
 
-          <img
-            src="${tour.image}"
-          >
+<img
+class="tour-image"
+src="${tour.image}"
+>
 
-          <div class="tour-content">
+<div class="tour-content">
 
-            <p class="agency-label">
-              ${agency.name}
-            </p>
+<div class="agency-name">
+${agency.name}
+</div>
 
-            <h3>${tour.name}</h3>
+<h3 class="tour-title">
+${tour.name}
+</h3>
 
-            <div class="price">
-              $${tour.price}
-            </div>
+<div class="tour-price">
+$${tour.price}
+</div>
 
-            <button class="btn">
-              Ver agencia
-            </button>
+<button class="card-btn">
+Ver Tour
+</button>
 
-          </div>
+</div>
 
-        </div>
+</div>
 
-      `;
+`;
 
-    });
+});
 
-  });
+});
 
 }
 
@@ -525,22 +765,22 @@ function loadHome(){
 
 function updateAgencySelect(){
 
-  const select =
-    document.getElementById('tourAgency');
+const select =
+document.getElementById('tourAgency');
 
-  select.innerHTML = '';
+select.innerHTML = '';
 
-  Object.keys(agencies).forEach(slug=>{
+Object.keys(agencies).forEach(slug=>{
 
-    select.innerHTML += `
+select.innerHTML += `
 
-      <option value="${slug}">
-        ${agencies[slug].name}
-      </option>
+<option value="${slug}">
+${agencies[slug].name}
+</option>
 
-    `;
+`;
 
-  });
+});
 
 }
 
@@ -548,54 +788,56 @@ function updateAgencySelect(){
 
 async function createAgency(){
 
-  const name =
-    document
-      .getElementById('agencyNameInput')
-      .value
-      .trim();
+const name =
+document
+.getElementById('agencyNameInput')
+.value
+.trim();
 
-  const desc =
-    document
-      .getElementById('agencyDescInput')
-      .value
-      .trim();
+const desc =
+document
+.getElementById('agencyDescInput')
+.value
+.trim();
 
-  if(!name){
+if(!name){
 
-    alert('Ingresa nombre');
+alert('Ingresa nombre');
 
-    return;
-  }
+return;
 
-  const slug =
-    name
-      .toLowerCase()
-      .replace(/\s+/g,'')
-      .replace(/[^a-z0-9]/g,'');
+}
 
-  const { error } =
-    await supabaseClient
-      .from('agencies')
-      .insert([
-        {
-          name:name,
-          description:desc,
-          slug:slug
-        }
-      ]);
+const slug =
+name
+.toLowerCase()
+.replace(/\s+/g,'')
+.replace(/[^a-z0-9]/g,'');
 
-  if(error){
+const { error } =
+await supabaseClient
+.from('agencies')
+.insert([
+{
+name:name,
+description:desc,
+slug:slug
+}
+]);
 
-    console.log(error);
+if(error){
 
-    alert('Error creando agencia');
+console.log(error);
 
-    return;
-  }
+alert('Error creando agencia');
 
-  alert('Agencia creada');
+return;
 
-  await loadAgencies();
+}
+
+alert('Agencia creada');
+
+await loadAgencies();
 
 }
 
@@ -603,61 +845,63 @@ async function createAgency(){
 
 async function createTour(){
 
-  const slug =
-    document
-      .getElementById('tourAgency')
-      .value;
+const slug =
+document
+.getElementById('tourAgency')
+.value;
 
-  const name =
-    document
-      .getElementById('tourName')
-      .value
-      .trim();
+const name =
+document
+.getElementById('tourName')
+.value
+.trim();
 
-  const image =
-    document
-      .getElementById('tourImage')
-      .value
-      .trim();
+const image =
+document
+.getElementById('tourImage')
+.value
+.trim();
 
-  const price =
-    parseInt(
-      document
-        .getElementById('tourPrice')
-        .value
-    );
+const price =
+parseInt(
+document
+.getElementById('tourPrice')
+.value
+);
 
-  if(!slug || !name){
+if(!slug || !name){
 
-    alert('Completa datos');
+alert('Completa datos');
 
-    return;
-  }
+return;
 
-  const { error } =
-    await supabaseClient
-      .from('tours')
-      .insert([
-        {
-          agency_slug:slug,
-          name:name,
-          image:image,
-          price:price
-        }
-      ]);
+}
 
-  if(error){
+const { error } =
+await supabaseClient
+.from('tours')
+.insert([
+{
+agency_slug:slug,
+name:name,
+image:image,
+price:price
+}
+]);
 
-    console.log(error);
+if(error){
 
-    alert('Error guardando tour');
+console.log(error);
 
-    return;
-  }
+alert('Error guardando tour');
 
-  alert('Tour creado');
+return;
 
-  await loadAgencies();
+}
+
+alert('Tour creado');
+
+await loadAgencies();
 
 }
 
@@ -665,82 +909,65 @@ async function createTour(){
 
 async function loadAgencies(){
 
-  const {
-    data: agenciesData,
-    error: agenciesError
-  } =
-  await supabaseClient
-    .from('agencies')
-    .select('*');
+const {
+data: agenciesData,
+error: agenciesError
+}
+=
+await supabaseClient
+.from('agencies')
+.select('*');
 
-  const {
-    data: toursData,
-    error: toursError
-  } =
-  await supabaseClient
-    .from('tours')
-    .select('*');
+const {
+data: toursData,
+error: toursError
+}
+=
+await supabaseClient
+.from('tours')
+.select('*');
 
-  console.log(agenciesData);
-  console.log(toursData);
+if(agenciesError){
 
-  if(agenciesError){
+console.log(agenciesError);
 
-    console.log(agenciesError);
-
-    return;
-  }
-
-  if(toursError){
-
-    console.log(toursError);
-
-    return;
-  }
-
-  agencies = {};
-
-  agenciesData.forEach(agency=>{
-
-    agencies[agency.slug] = {
-
-      name:agency.name,
-
-      description:
-        agency.description || '',
-
-      tours:
-        toursData.filter(
-          t => t.agency_slug === agency.slug
-        )
-
-    };
-
-  });
-
-  updateAgencySelect();
-
-  loadHome();
+return;
 
 }
 
+if(toursError){
 
+console.log(toursError);
 
-window.addEventListener(
-  'keydown',
-  function(e){
+return;
 
-    if(
-      e.ctrlKey &&
-      e.key === 'm'
-    ){
+}
 
-      showSection('adminPanel');
+agencies = {};
 
-    }
+agenciesData.forEach(agency=>{
 
-  }
-);
+agencies[agency.slug] = {
+
+name:agency.name,
+
+description:
+agency.description || '',
+
+tours:
+toursData.filter(
+t => t.agency_slug === agency.slug
+)
+
+};
+
+});
+
+updateAgencySelect();
+
+loadHome();
+
+}
 
 
 
