@@ -1,779 +1,1043 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>EnQentraMX</title>
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<style>
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-}
-
-:root{
---green:#0D5C46;
---green-dark:#06392C;
---gold:#D4AF37;
---bg:#FAFAF8;
---text:#1A1A1A;
---muted:#777;
---border:#ECECEC;
-}
-
-body{
-font-family:'DM Sans',sans-serif;
-background:var(--bg);
-color:var(--text);
-overflow-x:hidden;
-}
-
-.container{
-max-width:1200px;
-margin:auto;
-padding:0 24px;
-}
-
-nav{
-background:rgba(5,35,26,.96);
-backdrop-filter:blur(10px);
-padding:18px 0;
-position:sticky;
-top:0;
-z-index:999;
-border-bottom:1px solid rgba(255,255,255,.05);
-}
-
-.nav-inner{
-display:flex;
-justify-content:space-between;
-align-items:center;
-}
-
-.logo{
-font-family:'Playfair Display',serif;
-font-size:40px;
-font-weight:700;
-color:#fff;
-text-decoration:none;
-}
-
-.logo span{
-color:var(--gold);
-}
-
-.nav-links{
-display:flex;
-gap:30px;
-}
-
-.nav-links a{
-color:rgba(255,255,255,.75);
-text-decoration:none;
-font-size:14px;
-}
-
-.hero{
-background:linear-gradient(160deg,#04271D 0%,#0C503C 100%);
-padding:120px 0 90px;
-position:relative;
-overflow:hidden;
-}
-
-.hero::before{
-content:'';
-position:absolute;
-width:700px;
-height:700px;
-border-radius:50%;
-background:radial-gradient(circle,rgba(255,255,255,.06),transparent 70%);
-top:-250px;
-right:-150px;
-}
-
-.hero-content{
-position:relative;
-z-index:2;
-text-align:center;
-}
-
-.hero-badge{
-display:inline-block;
-padding:8px 18px;
-border-radius:999px;
-background:rgba(255,255,255,.08);
-border:1px solid rgba(255,255,255,.12);
-color:#CDEBDD;
-font-size:12px;
-letter-spacing:1px;
-margin-bottom:24px;
-}
-
-.hero h1{
-font-family:'Playfair Display',serif;
-font-size:72px;
-line-height:1.05;
-color:#fff;
-margin-bottom:20px;
-font-weight:600;
-}
-
-.hero h1 em{
-font-style:italic;
-color:var(--gold);
-}
-
-.hero p{
-font-size:18px;
-line-height:1.8;
-color:rgba(255,255,255,.68);
-max-width:760px;
-margin:auto;
-margin-bottom:40px;
-}
-
-.search-box{
-max-width:900px;
-margin:auto;
-display:flex;
-overflow:hidden;
-border-radius:18px;
-background:#fff;
-box-shadow:0 20px 60px rgba(0,0,0,.25);
-}
-
-.search-field{
-flex:1;
-padding:18px 22px;
-border-right:1px solid var(--border);
-}
-
-.search-label{
-font-size:11px;
-text-transform:uppercase;
-color:#999;
-margin-bottom:5px;
-letter-spacing:1px;
-}
-
-.search-value{
-font-size:16px;
-font-weight:500;
-}
-
-.search-btn{
-width:90px;
-background:#10A37F;
-border:none;
-color:#fff;
-font-size:26px;
-cursor:pointer;
-}
-
-.hero-tags{
-display:flex;
-justify-content:center;
-flex-wrap:wrap;
-gap:12px;
-margin-top:35px;
-}
-
-.hero-tag{
-padding:10px 18px;
-border-radius:999px;
-background:rgba(255,255,255,.09);
-border:1px solid rgba(255,255,255,.1);
-color:rgba(255,255,255,.78);
-font-size:13px;
-}
-
-.stats{
-background:#083C2E;
-padding:60px 0;
-}
-
-.stats-grid{
-display:grid;
-grid-template-columns:repeat(4,1fr);
-gap:40px;
-text-align:center;
-}
-
-.stat-number{
-font-family:'Playfair Display',serif;
-font-size:56px;
-color:var(--gold);
-font-weight:700;
-}
-
-.stat-label{
-font-size:12px;
-letter-spacing:1px;
-text-transform:uppercase;
-color:rgba(255,255,255,.5);
-margin-top:8px;
-}
-
-section{
-padding:90px 0;
-}
-
-.section-header{
-display:flex;
-justify-content:space-between;
-align-items:end;
-margin-bottom:45px;
-}
-
-.section-small{
-font-size:12px;
-letter-spacing:2px;
-text-transform:uppercase;
-color:#10A37F;
-margin-bottom:10px;
-}
-
-.section-title{
-font-family:'Playfair Display',serif;
-font-size:56px;
-font-weight:700;
-}
-
-.tours-grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
-gap:28px;
-}
-
-.tour-card{
-background:#fff;
-border-radius:24px;
-overflow:hidden;
-border:1px solid var(--border);
-transition:.25s;
-}
-
-.tour-card:hover{
-transform:translateY(-6px);
-box-shadow:0 20px 45px rgba(0,0,0,.08);
-}
-
-.tour-thumb{
-height:260px;
-background-size:cover;
-background-position:center;
-position:relative;
-}
-
-.t-badge{
-position:absolute;
-top:16px;
-left:16px;
-background:#fff;
-padding:7px 14px;
-border-radius:999px;
-font-size:12px;
-font-weight:600;
-}
-
-.t-fav{
-position:absolute;
-top:18px;
-right:18px;
-font-size:22px;
-}
-
-.tour-info{
-padding:24px;
-}
-
-.t-agency{
-font-size:13px;
-color:#888;
-margin-bottom:8px;
-}
-
-.t-name{
-font-size:28px;
-line-height:1.2;
-font-weight:700;
-margin-bottom:14px;
-}
-
-.t-meta{
-display:flex;
-gap:16px;
-font-size:14px;
-color:#777;
-margin-bottom:12px;
-}
-
-.t-rating{
-font-size:14px;
-margin-bottom:18px;
-}
-
-.t-price-row{
-display:flex;
-justify-content:space-between;
-align-items:center;
-}
-
-.t-price{
-font-size:30px;
-font-weight:700;
-}
-
-.t-price span{
-font-size:14px;
-font-weight:400;
-color:#888;
-}
-
-.t-btn{
-background:#0EA67A;
-color:#fff;
-border:none;
-padding:13px 22px;
-border-radius:12px;
-cursor:pointer;
-font-weight:600;
-}
-
-.agency-row{
-display:flex;
-gap:24px;
-overflow-x:auto;
-padding-bottom:10px;
-}
-
-.agency-pill{
-display:flex;
-flex-direction:column;
-align-items:center;
-min-width:110px;
-}
-
-.ag-avatar{
-width:90px;
-height:90px;
-border-radius:50%;
-overflow:hidden;
-border:3px solid #EDEDED;
-}
-
-.ag-avatar img{
-width:100%;
-height:100%;
-object-fit:cover;
-}
-
-.ag-name{
-margin-top:12px;
-font-size:14px;
-font-weight:600;
-text-align:center;
-}
-
-.admin-btn{
-position:fixed;
-bottom:20px;
-right:20px;
-background:#0EA67A;
-border:none;
-color:#fff;
-padding:14px 24px;
-border-radius:999px;
-font-weight:700;
-cursor:pointer;
-display:none;
-z-index:9999;
-}
-
-footer{
-background:#062B20;
-padding:70px 0;
-margin-top:80px;
-color:rgba(255,255,255,.7);
-text-align:center;
-}
-
-@media(max-width:900px){
-
-.hero h1{
-font-size:48px;
-}
-
-.search-box{
-flex-direction:column;
-}
-
-.search-field{
-border-right:none;
-border-bottom:1px solid var(--border);
-}
-
-.search-btn{
-width:100%;
-height:60px;
-}
-
-.stats-grid{
-grid-template-columns:repeat(2,1fr);
-}
-
-.section-title{
-font-size:42px;
-}
-
-}
-
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="EnQentraMX — Descubre los mejores tours y experiencias en México. Aventuras auténticas con guías locales.">
+  <title>EnQentraMX — Descubre México</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --v: #1D9E75; --vd: #0F6E56; --vdd: #085041;
+      --g: #C9A84C; --gl: #E8C96A;
+      --bg: #FAFAF8; --w: #fff;
+      --t: #1C1C1C; --tm: #4B4B48; --ts: #888780;
+      --bd: #E5E7EB;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t); overflow-x: hidden; }
+
+    @keyframes fadeUp { from { opacity:0; transform:translateY(22px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+    @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-7px)} }
+    @keyframes scaleIn { from{opacity:0;transform:scale(0.95)} to{opacity:1;transform:scale(1)} }
+    @keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.03)} }
+
+    .container { max-width: 1000px; margin: 0 auto; padding: 0 1.5rem; }
+
+    /* NAV */
+    nav {
+      background: rgba(10,45,30,0.97);
+      backdrop-filter: blur(12px);
+      padding: 1rem 0;
+      position: sticky; top: 0; z-index: 100;
+      border-bottom: 1px solid rgba(29,158,117,0.15);
+    }
+    .nav-inner { display:flex; align-items:center; justify-content:space-between; gap:1rem; flex-wrap:wrap; }
+    .nav-logo { font-family:'Playfair Display',serif; font-size:22px; color:#fff; text-decoration:none; }
+    .nav-logo em { font-style:normal; color:var(--gl); }
+    .nav-links { display:flex; gap:1.5rem; }
+    .nav-links a { font-size:13px; color:rgba(255,255,255,0.6); text-decoration:none; transition:color 0.2s; }
+    .nav-links a:hover { color:#fff; }
+    .nav-search {
+      display:flex; align-items:center; gap:8px;
+      background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.12);
+      border-radius:8px; padding:7px 14px; cursor:pointer;
+      transition:background 0.2s;
+    }
+    .nav-search:hover { background:rgba(255,255,255,0.13); }
+    .nav-search span { font-size:13px; color:rgba(255,255,255,0.55); }
+
+    /* HERO */
+    .hero {
+      background: linear-gradient(160deg, #072218 0%, #0F3D28 45%, #165C3A 100%);
+      padding: 6rem 0 5rem;
+      position: relative; overflow: hidden;
+    }
+    .hero-orb1 {
+      position:absolute; width:600px; height:600px; border-radius:50%;
+      background:radial-gradient(circle, rgba(29,158,117,0.18) 0%, transparent 65%);
+      top:-200px; right:-100px; pointer-events:none;
+    }
+    .hero-orb2 {
+      position:absolute; width:400px; height:400px; border-radius:50%;
+      background:radial-gradient(circle, rgba(201,168,76,0.1) 0%, transparent 65%);
+      bottom:-150px; left:-80px; pointer-events:none;
+    }
+    .hero-content { position:relative; z-index:1; text-align:center; max-width:700px; margin:0 auto; }
+    .hero-eyebrow {
+      display:inline-flex; align-items:center; gap:6px;
+      background:rgba(29,158,117,0.2); border:1px solid rgba(29,158,117,0.4);
+      color:#5DCAA5; font-size:11px; letter-spacing:1.5px; text-transform:uppercase;
+      padding:5px 16px; border-radius:20px; margin-bottom:1.5rem;
+      animation: fadeIn 0.6s ease both;
+    }
+    .hero h1 {
+      font-family:'Playfair Display',serif;
+      font-size:clamp(34px,6vw,58px); font-weight:600;
+      color:#fff; line-height:1.12; margin-bottom:1.2rem;
+      animation: fadeUp 0.7s ease 0.1s both;
+    }
+    .hero h1 em { font-style:italic; color:var(--gl); }
+    .hero p {
+      font-size:16px; color:rgba(255,255,255,0.6);
+      line-height:1.75; margin-bottom:2.5rem;
+      animation: fadeUp 0.7s ease 0.2s both;
+    }
+    .search-bar {
+      background:#fff; border-radius:14px;
+      display:flex; align-items:stretch; overflow:hidden;
+      box-shadow:0 20px 60px rgba(0,0,0,0.3);
+      animation: scaleIn 0.7s ease 0.3s both;
+      max-width:640px; margin:0 auto 2.5rem;
+    }
+    .search-field {
+      flex:1; display:flex; flex-direction:column;
+      padding:14px 20px; border-right:1px solid var(--bd); cursor:pointer;
+    }
+    .search-field:last-of-type { border-right:none; }
+    .sf-label { font-size:10px; text-transform:uppercase; letter-spacing:1px; color:var(--ts); margin-bottom:3px; }
+    .sf-value { font-size:14px; color:var(--t); font-weight:500; }
+    .search-btn {
+      background:var(--v); color:#fff; border:none;
+      padding:0 24px; font-size:20px; cursor:pointer;
+      transition:background 0.2s; min-width:60px;
+    }
+    .search-btn:hover { background:var(--vd); }
+    .hero-tags {
+      display:flex; gap:10px; justify-content:center; flex-wrap:wrap;
+      animation: fadeUp 0.7s ease 0.4s both;
+    }
+    .tag {
+      background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.15);
+      color:rgba(255,255,255,0.75); font-size:12px;
+      padding:6px 14px; border-radius:20px; cursor:pointer;
+      transition:background 0.2s, color 0.2s;
+    }
+    .tag:hover { background:rgba(255,255,255,0.18); color:#fff; }
+
+    /* ADMIN PANEL */
+    .admin-btn { position: fixed; bottom: 20px; right: 20px; z-index: 999; background: var(--v); color: white; border: none; padding: 12px 20px; border-radius: 50px; cursor: pointer; font-weight: 600; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+    .admin-btn:hover { background: var(--vd); }
+    .admin-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; }
+    .admin-modal.active { display: flex; }
+    .admin-content { background: white; border-radius: 12px; padding: 2rem; max-width: 600px; width: 90%; max-height: 90vh; overflow-y: auto; }
+    .admin-close { float: right; font-size: 24px; cursor: pointer; color: var(--ts); }
+    .admin-close:hover { color: var(--t); }
+    .admin-form { margin-top: 1.5rem; }
+    .form-group { margin-bottom: 1rem; }
+    .form-group label { display: block; font-weight: 600; margin-bottom: 0.5rem; font-size: 13px; }
+    .form-group input, .form-group textarea { width: 100%; padding: 10px; border: 1px solid var(--bd); border-radius: 6px; font-family: inherit; font-size: 13px; }
+    .form-group textarea { resize: vertical; min-height: 80px; }
+    .form-actions { display: flex; gap: 10px; margin-top: 1.5rem; }
+    .form-actions button { flex: 1; padding: 10px; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; }
+    .btn-save { background: var(--v); color: white; }
+    .btn-save:hover { background: var(--vd); }
+    .btn-cancel { background: var(--bd); color: var(--t); }
+    .btn-cancel:hover { background: #d1d5db; }
+    .agency-list { margin-top: 2rem; }
+    .agency-item { display: flex; align-items: center; gap: 1rem; padding: 1rem; background: var(--bg); border-radius: 8px; margin-bottom: 0.5rem; }
+    .agency-item img { width: 60px; height: 60px; border-radius: 8px; object-fit: cover; }
+    .agency-item-info { flex: 1; }
+    .agency-item-name { font-weight: 600; font-size: 14px; }
+    .agency-item-tours { font-size: 12px; color: var(--ts); }
+    .btn-delete { background: #EF4444; color: white; padding: 6px 12px; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; }
+    .btn-delete:hover { background: #DC2626; }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    .stats-band { background:#0F3D28; padding:3rem 0; }
+    .stats-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:2rem; text-align:center; }
+    .stat-big { font-family:'Playfair Display',serif; font-size:38px; color:var(--gl); font-weight:600; display:block; }
+    .stat-lbl { font-size:11px; color:rgba(255,255,255,0.5); text-transform:uppercase; letter-spacing:1px; }
+
+    /* SECCIONES */
+    section { padding:4rem 0; }
+    .sec-header { display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:2rem; flex-wrap:wrap; gap:1rem; }
+    .sec-eyebrow { font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--v); margin-bottom:6px; font-weight:500; }
+    .sec-title { font-family:'Playfair Display',serif; font-size:clamp(22px,3vw,30px); font-weight:600; color:var(--t); line-height:1.2; }
+    .sec-link { font-size:13px; color:var(--v); text-decoration:none; white-space:nowrap; }
+    .sec-link:hover { color:var(--vd); }
+
+    /* DESTINOS */
+    .destinos-grid {
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      grid-template-rows:repeat(2,160px);
+      gap:12px;
+    }
+    .destino-card {
+      border-radius:14px; overflow:hidden;
+      position:relative; cursor:pointer;
+      transition:transform 0.3s, box-shadow 0.3s;
+    }
+    .destino-card:hover { transform:scale(1.02); box-shadow:0 16px 40px rgba(0,0,0,0.2); }
+    .destino-card.big { grid-column:span 2; grid-row:span 2; }
+    .d-bg { position:absolute; inset:0; background-size:cover; background-position:center; }
+    .d-bg-oaxaca { background:linear-gradient(160deg,#1A3A2A,#2D6B4A); }
+    .d-bg-cdmx { background:linear-gradient(160deg,#1A2A3A,#2D4A6B); }
+    .d-bg-chiapas { background:linear-gradient(160deg,#1A3A1A,#2D6B2D); }
+    .d-bg-yucatan { background:linear-gradient(160deg,#3A2A1A,#6B4A2D); }
+    .d-bg-baja { background:linear-gradient(160deg,#1A2A3A,#2D4A5A); }
+    .d-overlay { position:absolute; inset:0; background:linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 55%); }
+    .d-emoji { position:absolute; top:50%; left:50%; transform:translate(-50%,-65%); font-size:36px; }
+    .destino-card.big .d-emoji { font-size:52px; }
+    .d-info { position:absolute; bottom:14px; left:14px; }
+    .d-name { font-size:15px; font-weight:500; color:#fff; }
+    .d-count { font-size:11px; color:rgba(255,255,255,0.65); }
+    .destino-card.big .d-name { font-size:20px; }
+
+    /* TOURS */
+    .tours-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:20px; }
+    .tour-card {
+      background:var(--w); border:0.5px solid var(--bd);
+      border-radius:16px; overflow:hidden;
+      transition:transform 0.25s, box-shadow 0.25s; cursor:pointer;
+    }
+    .tour-card:hover { transform:translateY(-5px); box-shadow:0 16px 40px rgba(0,0,0,0.1); }
+    .tour-thumb { height:190px; display:flex; align-items:center; justify-content:center; font-size:54px; position:relative; }
+    .t-bg1{background:linear-gradient(135deg,#E1F5EE,#9FE1CB)}
+    .t-bg2{background:linear-gradient(135deg,#E6F1FB,#B5D4F4)}
+    .t-bg3{background:linear-gradient(135deg,#FAECE7,#F5C4B3)}
+    .t-bg4{background:linear-gradient(135deg,#FAEEDA,#FAC775)}
+    .t-bg5{background:linear-gradient(135deg,#EAF3DE,#C0DD97)}
+    .t-bg6{background:linear-gradient(135deg,#FBEAF0,#F4C0D1)}
+    .t-badge {
+      position:absolute; top:12px; left:12px;
+      background:rgba(255,255,255,0.93); color:var(--t);
+      font-size:10px; font-weight:500; padding:4px 10px; border-radius:20px;
+    }
+    .t-fav { position:absolute; top:10px; right:12px; font-size:18px; cursor:pointer; }
+    .tour-info { padding:1.1rem 1.25rem 1.25rem; }
+    .t-agency { font-size:11px; color:var(--ts); margin-bottom:3px; }
+    .t-name { font-size:15px; font-weight:500; color:var(--t); margin-bottom:6px; line-height:1.3; }
+    .t-meta { display:flex; gap:10px; font-size:12px; color:var(--ts); margin-bottom:8px; }
+    .t-rating { display:flex; align-items:center; gap:4px; font-size:12px; color:var(--t); font-weight:500; }
+    .t-stars { color:#C9A84C; font-size:11px; }
+    .t-price-row { display:flex; align-items:center; justify-content:space-between; margin-top:10px; }
+    .t-price { font-size:15px; font-weight:500; color:var(--t); }
+    .t-price span { font-size:12px; color:var(--ts); font-weight:400; }
+    .t-btn {
+      background:var(--v); color:#fff; border:none;
+      font-size:12px; font-weight:500; padding:7px 16px;
+      border-radius:8px; cursor:pointer; font-family:'DM Sans',sans-serif;
+      transition:background 0.2s;
+    }
+    .t-btn:hover { background:var(--vd); }
+
+    /* EXPERIENCIAS */
+    .exp-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:14px; }
+    .exp-card {
+      background:var(--w); border:0.5px solid var(--bd);
+      border-radius:14px; padding:1.5rem;
+      transition:transform 0.2s, border-color 0.2s; cursor:pointer;
+    }
+    .exp-card:hover { transform:translateY(-3px); border-color:var(--v); }
+    .exp-icon { font-size:28px; margin-bottom:1rem; display:block; animation:float 3s ease-in-out infinite; }
+    .exp-card h3 { font-size:14px; font-weight:500; margin-bottom:5px; }
+    .exp-card p { font-size:12px; color:var(--ts); line-height:1.6; }
+    .exp-count { font-size:11px; color:var(--v); font-weight:500; margin-top:10px; display:block; }
+
+    /* AGENCIAS */
+    .agency-row { display:flex; gap:20px; overflow-x:auto; padding-bottom:8px; scrollbar-width:none; }
+    .agency-row::-webkit-scrollbar { display:none; }
+    .agency-pill { display:flex; flex-direction:column; align-items:center; gap:8px; cursor:pointer; flex-shrink:0; }
+    .ag-avatar {
+      width:68px; height:68px; border-radius:50%;
+      display:flex; align-items:center; justify-content:center;
+      font-size:28px; border:2px solid var(--bd);
+      transition:border-color 0.2s, transform 0.2s;
+    }
+    .agency-pill:hover .ag-avatar { border-color:var(--v); transform:scale(1.05); }
+    .ag-name { font-size:12px; color:var(--tm); text-align:center; max-width:80px; line-height:1.3; }
+    .ag-tours { font-size:11px; color:var(--ts); }
+
+    /* ¿ERES AGENCIA? — muy discreto al final */
+    .agency-join {
+      background:#0F3D28; padding:4rem 0; text-align:center;
+    }
+    .agency-join p { font-size:12px; color:rgba(255,255,255,0.35); margin-bottom:12px; }
+    .agency-join h3 { font-family:'Playfair Display',serif; font-size:22px; color:#fff; margin-bottom:8px; }
+    .agency-join span { font-size:14px; color:rgba(255,255,255,0.55); display:block; margin-bottom:1.5rem; }
+    .join-btn {
+      display:inline-flex; align-items:center; gap:8px;
+      background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2);
+      color:#fff; font-size:13px; font-weight:500;
+      padding:11px 24px; border-radius:8px; text-decoration:none;
+      transition:background 0.2s; font-family:'DM Sans',sans-serif;
+    }
+    .join-btn:hover { background:rgba(255,255,255,0.18); }
+
+    /* FOOTER */
+    footer { background:#0A2D1E; padding:3rem 0 2rem; }
+    .footer-top {
+      display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+      gap:2rem; margin-bottom:2rem;
+      padding-bottom:2rem; border-bottom:1px solid rgba(255,255,255,0.08);
+    }
+    .footer-logo { font-family:'Playfair Display',serif; font-size:20px; color:#fff; margin-bottom:8px; }
+    .footer-logo em { font-style:normal; color:var(--gl); }
+    .footer-desc { font-size:12px; color:rgba(255,255,255,0.35); line-height:1.7; }
+    .footer-col h4 { font-size:11px; color:rgba(255,255,255,0.4); text-transform:uppercase; letter-spacing:1px; margin-bottom:12px; }
+    .footer-col a { display:block; font-size:13px; color:rgba(255,255,255,0.5); text-decoration:none; margin-bottom:8px; transition:color 0.2s; }
+    .footer-col a:hover { color:#fff; }
+    .footer-bottom { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem; }
+    .footer-bottom p { font-size:11px; color:rgba(255,255,255,0.2); }
+
+    @media(max-width:640px){
+      .hero{padding:3.5rem 0 3rem;}
+      .search-bar{flex-direction:column;}
+      .search-field{border-right:none; border-bottom:1px solid var(--bd);}
+      .search-btn{min-height:50px; width:100%;}
+      .nav-links{display:none;}
+      .destinos-grid{grid-template-columns:1fr 1fr; grid-template-rows:auto;}
+      .destino-card.big{grid-column:span 2; height:200px;}
+    }
+  </style>
 </head>
-
 <body>
 
+<!-- NAV -->
 <nav>
-<div class="container nav-inner">
-
-<a href="#" class="logo">
-EnQentra<span>MX</span>
-</a>
-
-<div class="nav-links">
-<a href="#tours">Tours</a>
-<a href="#agencias">Agencias</a>
-<a href="#">Experiencias</a>
-</div>
-
-</div>
+  <div class="container nav-inner">
+    <a href="/" class="nav-logo">EnQentra<em>MX</em></a>
+    <div class="nav-links">
+      <a href="#tours">Tours</a>
+      <a href="#destinos">Destinos</a>
+      <a href="#experiencias">Experiencias</a>
+      <a href="#agencias">Agencias</a>
+    </div>
+    <div class="nav-search">
+      <span>🔍</span>
+      <span>Buscar tours...</span>
+    </div>
+  </div>
 </nav>
 
+<!-- HERO -->
 <section class="hero">
-
-<div class="container hero-content">
-
-<div class="hero-badge">
-✨ Explora México
-</div>
-
-<h1>
-Descubre <em>tours auténticos</em><br>
-en México
-</h1>
-
-<p>
-Conecta con guías locales y vive experiencias inmersivas en los destinos más bellos del país
-</p>
-
-<div class="search-box">
-
-<div class="search-field">
-<div class="search-label">Destino</div>
-<div class="search-value">¿A dónde viajas?</div>
-</div>
-
-<div class="search-field">
-<div class="search-label">Fechas</div>
-<div class="search-value">Cuándo</div>
-</div>
-
-<div class="search-field">
-<div class="search-label">Tipo</div>
-<div class="search-value">Tipo de tour</div>
-</div>
-
-<button class="search-btn">
-🔎
-</button>
-
-</div>
-
-<div class="hero-tags">
-<div class="hero-tag">🏔️ Aventura</div>
-<div class="hero-tag">🏛️ Cultura</div>
-<div class="hero-tag">🍽️ Gastronomía</div>
-<div class="hero-tag">🌊 Playa</div>
-</div>
-
-</div>
-
+  <div class="hero-orb1"></div>
+  <div class="hero-orb2"></div>
+  <div class="container">
+    <div class="hero-content">
+      <div class="hero-eyebrow">🌿 Tours auténticos · Guías locales · Toda la república</div>
+      <h1>Descubre el México<br><em>que pocos conocen</em></h1>
+      <p>Las mejores experiencias, los mejores guías locales.<br>Tu próxima aventura empieza aquí.</p>
+      <div class="search-bar">
+        <div class="search-field">
+          <span class="sf-label">¿A dónde?</span>
+          <span class="sf-value">Oaxaca, Chiapas, CDMX...</span>
+        </div>
+        <div class="search-field">
+          <span class="sf-label">¿Cuándo?</span>
+          <span class="sf-value">Cualquier fecha</span>
+        </div>
+        <div class="search-field">
+          <span class="sf-label">Viajeros</span>
+          <span class="sf-value">2 personas</span>
+        </div>
+        <button class="search-btn">🔍</button>
+      </div>
+      <div class="hero-tags">
+        <span class="tag">🏔️ Aventura</span>
+        <span class="tag">🏛️ Cultura</span>
+        <span class="tag">🌊 Playa</span>
+        <span class="tag">🍽️ Gastronomía</span>
+        <span class="tag">🌿 Naturaleza</span>
+        <span class="tag">🎭 Tradiciones</span>
+      </div>
+    </div>
+  </div>
 </section>
 
-<div class="stats">
-
-<div class="container">
-
-<div class="stats-grid">
-
-<div>
-<div class="stat-number">5,248</div>
-<div class="stat-label">Viajeros satisfechos</div>
+<!-- STATS -->
+<div class="stats-band">
+  <div class="container">
+    <div class="stats-grid">
+      <div><span class="stat-big">27K+</span><span class="stat-lbl">Viajeros activos</span></div>
+      <div><span class="stat-big">180+</span><span class="stat-lbl">Tours disponibles</span></div>
+      <div><span class="stat-big">32</span><span class="stat-lbl">Destinos en México</span></div>
+      <div><span class="stat-big">4.9</span><span class="stat-lbl">Calificación promedio</span></div>
+    </div>
+  </div>
 </div>
 
-<div>
-<div class="stat-number">180+</div>
-<div class="stat-label">Tours disponibles</div>
-</div>
-
-<div>
-<div class="stat-number">4.9★</div>
-<div class="stat-label">Rating promedio</div>
-</div>
-
-<div>
-<div class="stat-number">45</div>
-<div class="stat-label">Agencias verificadas</div>
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-<section id="tours">
-
-<div class="container">
-
-<div class="section-header">
-
-<div>
-<div class="section-small">
-Los más reservados
-</div>
-
-<div class="section-title">
-Tours destacados
-</div>
-</div>
-
-</div>
-
-<div class="tours-grid" id="toursGrid"></div>
-
-</div>
-
+<!-- DESTINOS -->
+<section id="destinos">
+  <div class="container">
+    <div class="sec-header">
+      <div><p class="sec-eyebrow">Explora México</p><h2 class="sec-title">Destinos populares</h2></div>
+      <a href="#" class="sec-link">Ver todos →</a>
+    </div>
+    <div class="destinos-grid">
+      <div class="destino-card big">
+        <div class="d-bg d-bg-oaxaca"></div>
+        <div class="d-overlay"></div>
+        <div class="d-emoji">🌿</div>
+        <div class="d-info"><p class="d-name">Oaxaca</p><p class="d-count">48 tours disponibles</p></div>
+      </div>
+      <div class="destino-card">
+        <div class="d-bg d-bg-cdmx"></div>
+        <div class="d-overlay"></div>
+        <div class="d-emoji">🏛️</div>
+        <div class="d-info"><p class="d-name">Ciudad de México</p><p class="d-count">36 tours</p></div>
+      </div>
+      <div class="destino-card">
+        <div class="d-bg d-bg-chiapas"></div>
+        <div class="d-overlay"></div>
+        <div class="d-emoji">🌊</div>
+        <div class="d-info"><p class="d-name">Chiapas</p><p class="d-count">29 tours</p></div>
+      </div>
+      <div class="destino-card">
+        <div class="d-bg d-bg-yucatan"></div>
+        <div class="d-overlay"></div>
+        <div class="d-emoji">🏖️</div>
+        <div class="d-info"><p class="d-name">Yucatán</p><p class="d-count">24 tours</p></div>
+      </div>
+      <div class="destino-card">
+        <div class="d-bg d-bg-baja"></div>
+        <div class="d-overlay"></div>
+        <div class="d-emoji">🌵</div>
+        <div class="d-info"><p class="d-name">Baja California</p><p class="d-count">18 tours</p></div>
+      </div>
+    </div>
+  </div>
 </section>
 
-<section id="agencias">
-
-<div class="container">
-
-<div class="section-header">
-
-<div>
-<div class="section-small">
-Guías locales
-</div>
-
-<div class="section-title">
-Agencias en la plataforma
-</div>
-</div>
-
-</div>
-
-<div class="agency-row" id="agencyRow"></div>
-
-</div>
-
+<!-- TOURS -->
+<section id="tours" style="background:var(--w)">
+  <div class="container">
+    <div class="sec-header">
+      <div><p class="sec-eyebrow">Los más reservados</p><h2 class="sec-title">Tours destacados</h2></div>
+      <a href="#" class="sec-link">Ver todos →</a>
+    </div>
+    <div class="tours-grid">
+      <div class="tour-card">
+        <div class="tour-thumb t-bg1">🏔️<div class="t-badge">Más popular</div><div class="t-fav">🤍</div></div>
+        <div class="tour-info">
+          <p class="t-agency">El Cuate Garza · Oaxaca</p>
+          <p class="t-name">Sierra Norte — Pueblos Mancomunados</p>
+          <div class="t-meta"><span>📅 2 días</span><span>👥 Hasta 10</span></div>
+          <div class="t-rating"><span class="t-stars">★★★★★</span>&nbsp;4.9&nbsp;<span style="color:var(--ts);font-weight:400">(42 reseñas)</span></div>
+          <div class="t-price-row"><p class="t-price">$1,800 <span>/ persona</span></p><button class="t-btn">Reservar</button></div>
+        </div>
+      </div>
+      <div class="tour-card">
+        <div class="tour-thumb t-bg2">🏛️<div class="t-badge">Nuevo</div><div class="t-fav">🤍</div></div>
+        <div class="tour-info">
+          <p class="t-agency">Rutas del Sur · Chiapas</p>
+          <p class="t-name">Cañón del Sumidero y Chiapa de Corzo</p>
+          <div class="t-meta"><span>📅 1 día</span><span>👥 Hasta 15</span></div>
+          <div class="t-rating"><span class="t-stars">★★★★★</span>&nbsp;4.8&nbsp;<span style="color:var(--ts);font-weight:400">(28 reseñas)</span></div>
+          <div class="t-price-row"><p class="t-price">$950 <span>/ persona</span></p><button class="t-btn">Reservar</button></div>
+        </div>
+      </div>
+      <div class="tour-card">
+        <div class="tour-thumb t-bg3">🌊<div class="t-badge">Aventura</div><div class="t-fav">❤️</div></div>
+        <div class="tour-info">
+          <p class="t-agency">Costa Viva · Oaxaca</p>
+          <p class="t-name">Puerto Escondido — Surf y Tortugas</p>
+          <div class="t-meta"><span>📅 3 días</span><span>👥 Hasta 12</span></div>
+          <div class="t-rating"><span class="t-stars">★★★★★</span>&nbsp;5.0&nbsp;<span style="color:var(--ts);font-weight:400">(19 reseñas)</span></div>
+          <div class="t-price-row"><p class="t-price">$3,200 <span>/ persona</span></p><button class="t-btn">Reservar</button></div>
+        </div>
+      </div>
+      <div class="tour-card">
+        <div class="tour-thumb t-bg4">🍶<div class="t-badge">Gastronomía</div><div class="t-fav">🤍</div></div>
+        <div class="tour-info">
+          <p class="t-agency">El Cuate Garza · Oaxaca</p>
+          <p class="t-name">Ruta del Mezcal — Palenques y Degustación</p>
+          <div class="t-meta"><span>📅 1 día</span><span>👥 Hasta 20</span></div>
+          <div class="t-rating"><span class="t-stars">★★★★☆</span>&nbsp;4.7&nbsp;<span style="color:var(--ts);font-weight:400">(55 reseñas)</span></div>
+          <div class="t-price-row"><p class="t-price">$850 <span>/ persona</span></p><button class="t-btn">Reservar</button></div>
+        </div>
+      </div>
+      <div class="tour-card">
+        <div class="tour-thumb t-bg5">🌿<div class="t-badge">Naturaleza</div><div class="t-fav">🤍</div></div>
+        <div class="tour-info">
+          <p class="t-agency">Selva Tours · Chiapas</p>
+          <p class="t-name">Cascadas de Agua Azul y Misol-Há</p>
+          <div class="t-meta"><span>📅 1 día</span><span>👥 Hasta 18</span></div>
+          <div class="t-rating"><span class="t-stars">★★★★★</span>&nbsp;4.9&nbsp;<span style="color:var(--ts);font-weight:400">(37 reseñas)</span></div>
+          <div class="t-price-row"><p class="t-price">$1,100 <span>/ persona</span></p><button class="t-btn">Reservar</button></div>
+        </div>
+      </div>
+      <div class="tour-card">
+        <div class="tour-thumb t-bg6">🏺<div class="t-badge">Cultura</div><div class="t-fav">🤍</div></div>
+        <div class="tour-info">
+          <p class="t-agency">Patrimonio MX · Yucatán</p>
+          <p class="t-name">Chichén Itzá — Tour Privado con Cenote</p>
+          <div class="t-meta"><span>📅 1 día</span><span>👥 Hasta 8</span></div>
+          <div class="t-rating"><span class="t-stars">★★★★★</span>&nbsp;5.0&nbsp;<span style="color:var(--ts);font-weight:400">(61 reseñas)</span></div>
+          <div class="t-price-row"><p class="t-price">$2,400 <span>/ persona</span></p><button class="t-btn">Reservar</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
 
+<!-- EXPERIENCIAS -->
+<section id="experiencias">
+  <div class="container">
+    <div class="sec-header">
+      <div><p class="sec-eyebrow">¿Qué quieres vivir?</p><h2 class="sec-title">Explora por experiencia</h2></div>
+    </div>
+    <div class="exp-grid">
+      <div class="exp-card">
+        <span class="exp-icon">🏔️</span>
+        <h3>Aventura y naturaleza</h3>
+        <p>Senderismo, rappel, kayak en los paisajes más impresionantes de México</p>
+        <span class="exp-count">64 tours disponibles</span>
+      </div>
+      <div class="exp-card">
+        <span class="exp-icon">🏛️</span>
+        <h3>Cultura e historia</h3>
+        <p>Zonas arqueológicas, museos, pueblos mágicos y tradiciones vivas</p>
+        <span class="exp-count">48 tours disponibles</span>
+      </div>
+      <div class="exp-card">
+        <span class="exp-icon">🍽️</span>
+        <h3>Gastronomía</h3>
+        <p>Mercados, cocinas tradicionales, mezcalerías y experiencias culinarias únicas</p>
+        <span class="exp-count">32 tours disponibles</span>
+      </div>
+      <div class="exp-card">
+        <span class="exp-icon">🌊</span>
+        <h3>Playa y costa</h3>
+        <p>Snorkel, tortugas, surf y navegación en el Pacífico y el Caribe mexicano</p>
+        <span class="exp-count">41 tours disponibles</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AGENCIAS -->
+<section id="agencias" style="background:var(--w)">
+  <div class="container">
+    <div class="sec-header">
+      <div><p class="sec-eyebrow">Guías locales</p><h2 class="sec-title">Agencias en la plataforma</h2></div>
+      <a href="#" class="sec-link">Ver todas →</a>
+    </div>
+    <div class="agency-row">
+      <div class="agency-pill"><div class="ag-avatar" style="background:#E1F5EE">🌿</div><span class="ag-name">El Cuate Garza</span><span class="ag-tours">8 tours</span></div>
+      <div class="agency-pill"><div class="ag-avatar" style="background:#E6F1FB">🏛️</div><span class="ag-name">Rutas del Sur</span><span class="ag-tours">12 tours</span></div>
+      <div class="agency-pill"><div class="ag-avatar" style="background:#FAECE7">🌊</div><span class="ag-name">Costa Viva</span><span class="ag-tours">6 tours</span></div>
+      <div class="agency-pill"><div class="ag-avatar" style="background:#FAEEDA">🍶</div><span class="ag-name">Selva Tours</span><span class="ag-tours">9 tours</span></div>
+      <div class="agency-pill"><div class="ag-avatar" style="background:#EAF3DE">🏺</div><span class="ag-name">Patrimonio MX</span><span class="ag-tours">11 tours</span></div>
+      <div class="agency-pill"><div class="ag-avatar" style="background:#FBEAF0">🌵</div><span class="ag-name">Baja Viva</span><span class="ag-tours">7 tours</span></div>
+      <div class="agency-pill"><div class="ag-avatar" style="background:#E1F5EE">🎭</div><span class="ag-name">Tradiciones MX</span><span class="ag-tours">5 tours</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ¿ERES AGENCIA? — discreto al final -->
+<div class="agency-join">
+  <div class="container">
+    <p>¿Tienes una agencia de tours?</p>
+    <h3>Lleva tu agencia al siguiente nivel</h3>
+    <span>Únete a la plataforma y conecta con miles de viajeros en todo México</span>
+    <a href="https://wa.me/52XXXXXXXXXX?text=Hola, quiero publicar mi agencia en EnQentraMX" class="join-btn">Contáctanos →</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
 <footer>
-
-<div class="container">
-
-© 2026 EnQentraMX — Todos los derechos reservados
-
-</div>
-
+  <div class="container">
+    <div class="footer-top">
+      <div>
+        <p class="footer-logo">EnQentra<em>MX</em></p>
+        <p class="footer-desc">Conectamos viajeros con las mejores agencias de tours y guías locales en toda la república mexicana.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Destinos</h4>
+        <a href="#">Oaxaca</a><a href="#">Chiapas</a><a href="#">Yucatán</a>
+        <a href="#">Ciudad de México</a><a href="#">Baja California</a>
+      </div>
+      <div class="footer-col">
+        <h4>Experiencias</h4>
+        <a href="#">Aventura</a><a href="#">Cultura</a>
+        <a href="#">Gastronomía</a><a href="#">Playa y costa</a>
+      </div>
+      <div class="footer-col">
+        <h4>Contacto</h4>
+        <a href="https://wa.me/52XXXXXXXXXX">WhatsApp</a>
+        <a href="#">hola@enqentramx.com</a>
+        <a href="#">Instagram</a><a href="#">Facebook</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 EnQentraMX · Todos los derechos reservados</p>
+      <p>Hecho con ❤️ para los viajeros de México</p>
+    </div>
+  </div>
 </footer>
 
-<button class="admin-btn" id="adminBtn">
-Admin
-</button>
+<!-- ADMIN BUTTON -->
+<button class="admin-btn" id="adminBtn">Admin</button>
+
+<!-- ADMIN MODAL -->
+<div class="admin-modal" id="adminModal">
+  <div class="admin-content">
+    <span class="admin-close" id="closeAdmin">&times;</span>
+    <h2>Panel Administrativo</h2>
+    <p style="color: var(--ts); font-size: 13px; margin-top: 0.5rem;">Gestiona agencias y tours</p>
+    
+    <!-- TABS -->
+    <div style="display: flex; gap: 1rem; margin: 1.5rem 0; border-bottom: 1px solid var(--bd); padding-bottom: 1rem;">
+      <button class="tab-btn active" data-tab="agencies" style="background: none; border: none; padding: 0; cursor: pointer; font-weight: 600; color: var(--v); border-bottom: 2px solid var(--v); padding-bottom: 0.5rem;">Agencias</button>
+      <button class="tab-btn" data-tab="tours" style="background: none; border: none; padding: 0; cursor: pointer; font-weight: 600; color: var(--ts);">Tours</button>
+    </div>
+
+    <!-- TAB AGENCIAS -->
+    <div class="tab-content active" id="agencies-tab">
+      <h3 style="margin-bottom: 1rem; font-size: 16px;">Agregar/Editar Agencia</h3>
+      <form id="agencyForm">
+        <div class="form-group">
+          <label>Nombre de la Agencia</label>
+          <input type="text" id="agencyName" required placeholder="Ej: El Cuate Garza">
+        </div>
+        <div class="form-group">
+          <label>Logo (URL)</label>
+          <input type="url" id="agencyLogo" required placeholder="https://ejemplo.com/logo.jpg">
+        </div>
+        <div class="form-group">
+          <label>Foto de Portada (URL)</label>
+          <input type="url" id="agencyCover" placeholder="https://ejemplo.com/portada.jpg">
+        </div>
+        <div class="form-group">
+          <label>Descripción</label>
+          <textarea id="agencyDescription" placeholder="Describe tu agencia..."></textarea>
+        </div>
+        <div class="form-group">
+          <label>Whatsapp (con código de país: 52...)</label>
+          <input type="text" id="agencyWhatsapp" placeholder="521234567890">
+        </div>
+        <div class="form-group">
+          <label>Facebook</label>
+          <input type="url" id="agencyFacebook" placeholder="https://facebook.com/tuagencia">
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn-save">Guardar Agencia</button>
+          <button type="button" class="btn-cancel" onclick="resetAgencyForm()">Cancelar</button>
+        </div>
+      </form>
+
+      <div class="agency-list">
+        <h3 style="margin-bottom: 1rem; font-size: 16px; margin-top: 2rem;">Agencias Guardadas</h3>
+        <div id="agenciesList"></div>
+      </div>
+    </div>
+
+    <!-- TAB TOURS -->
+    <div class="tab-content" id="tours-tab">
+      <h3 style="margin-bottom: 1rem; font-size: 16px;">Agregar/Editar Tour</h3>
+      <form id="tourForm">
+        <div class="form-group">
+          <label>Nombre del Tour</label>
+          <input type="text" id="tourName" required placeholder="Ej: Cenotes de Tulum">
+        </div>
+        <div class="form-group">
+          <label>Agencia</label>
+          <select id="tourAgency" required>
+            <option value="">Selecciona una agencia</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Descripción</label>
+          <textarea id="tourDescription" placeholder="Describe el tour..."></textarea>
+        </div>
+        <div class="form-group">
+          <label>Foto del Tour (URL)</label>
+          <input type="url" id="tourImage" required placeholder="https://ejemplo.com/tour.jpg">
+        </div>
+        <div class="form-group">
+          <label>Precio (por persona)</label>
+          <input type="number" id="tourPrice" required min="0" placeholder="1800">
+        </div>
+        <div class="form-group">
+          <label>Duración</label>
+          <input type="text" id="tourDuration" placeholder="Ej: 3 días">
+        </div>
+        <div class="form-group">
+          <label>Capacidad (personas)</label>
+          <input type="number" id="tourCapacity" min="1" placeholder="10">
+        </div>
+        <div class="form-group">
+          <label>Estado</label>
+          <select id="tourState" required>
+            <option value="">Selecciona un estado</option>
+            <option value="Oaxaca">Oaxaca</option>
+            <option value="Chiapas">Chiapas</option>
+            <option value="Yucatán">Yucatán</option>
+            <option value="CDMX">CDMX</option>
+            <option value="Baja California">Baja California</option>
+            <option value="Quintana Roo">Quintana Roo</option>
+            <option value="Guanajuato">Guanajuato</option>
+            <option value="Jalisco">Jalisco</option>
+            <option value="Puebla">Puebla</option>
+            <option value="Otro">Otro</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Badge/Categoría</label>
+          <input type="text" id="tourBadge" placeholder="Ej: Aventura, Cultura, Naturaleza">
+        </div>
+        <div class="form-group">
+          <label>Rating</label>
+          <input type="number" id="tourRating" min="0" max="5" step="0.1" placeholder="4.9">
+        </div>
+        <div class="form-group">
+          <label>Número de Reseñas</label>
+          <input type="number" id="tourReviews" min="0" placeholder="42">
+        </div>
+        <div class="form-group">
+          <label>
+            <input type="checkbox" id="tourFeatured"> Destacado
+          </label>
+        </div>
+        <div class="form-group">
+          <label>
+            <input type="checkbox" id="tourComingSoon"> Próximo Viaje
+          </label>
+        </div>
+        <div class="form-group">
+          <label>
+            <input type="checkbox" id="tourVisible"> Visible en inicio
+          </label>
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn-save">Guardar Tour</button>
+          <button type="button" class="btn-cancel" onclick="resetTourForm()">Cancelar</button>
+        </div>
+      </form>
+
+      <div style="margin-top: 2rem;">
+        <h3 style="margin-bottom: 1rem; font-size: 16px;">Tours Guardados</h3>
+        <div id="toursList"></div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <script>
-
-// ===== SUPABASE =====
-
-const SUPABASE_URL = "https://iaemzeidkyxayhsiunmt.supabase.co";
+// ===== CONFIGURACIÓN SUPABASE =====
+const SUPABASE_URL = "https://iaemzeidkyxayhsiunmt.supabase.co/rest/v1/";
 const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlhZW16ZWlka3l4YXloc2l1bm10Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg2NDcxNzcsImV4cCI6MjA5NDIyMzE3N30.5ICsYhzx5BCppUuVQBO38jAsULZsvx5NenIYznJAMtQ";
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-const supabaseClient = supabase.createClient(
-SUPABASE_URL,
-SUPABASE_KEY
-);
+let agencies = [];
+let tours = [];
+let editingAgencyId = null;
+let editingTourId = null;
 
-// ===== ADMIN =====
-
-const params = new URLSearchParams(window.location.search);
-
-const isAdmin = params.get('admin') === 'true';
-
-if(isAdmin){
-document.getElementById('adminBtn').style.display = 'block';
-}
-
-// ===== TOURS =====
-
-async function renderHomeTours(){
-
-try{
-
-const { data:tours, error } = await supabaseClient
-.from('tours')
-.select('*')
-.eq('visible', true)
-.order('id', { ascending:false });
-
-if(error) throw error;
-
-const grid = document.getElementById('toursGrid');
-
-grid.innerHTML = '';
-
-tours.forEach((tour)=>{
-
-const card = document.createElement('div');
-
-card.className = 'tour-card';
-
-card.innerHTML = `
-
-<div
-class="tour-thumb"
-style="
-background-image:url('${tour.image}');
-"
->
-
-<div class="t-badge">
-${tour.badge || 'Tour'}
-</div>
-
-<div class="t-fav">
-❤️
-</div>
-
-</div>
-
-<div class="tour-info">
-
-<div class="t-agency">
-${tour.state || 'México'}
-</div>
-
-<div class="t-name">
-${tour.name}
-</div>
-
-<div class="t-meta">
-<span>📅 ${tour.duration || '1 día'}</span>
-<span>👥 Hasta ${tour.capacity || 10}</span>
-</div>
-
-<div class="t-rating">
-★★★★★ ${tour.rating || 4.9}
-</div>
-
-<div class="t-price-row">
-
-<div class="t-price">
-$${tour.price}
-<span>/ persona</span>
-</div>
-
-<button class="t-btn">
-Reservar
-</button>
-
-</div>
-
-</div>
-
-`;
-
-grid.appendChild(card);
-
+// ===== INIT =====
+document.addEventListener('DOMContentLoaded', () => {
+  setupTabs();
+  setupEventListeners();
+  document.getElementById('adminBtn').addEventListener('click', openAdmin);
+  document.getElementById('closeAdmin').addEventListener('click', closeAdmin);
 });
 
-}catch(err){
-
-console.error(err);
-
+// ===== TABS =====
+function setupTabs() {
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      const tab = e.target.dataset.tab;
+      document.querySelectorAll('.tab-btn').forEach(b => {
+        b.style.color = 'var(--ts)';
+        b.style.borderBottom = 'none';
+        b.style.paddingBottom = '0.5rem';
+      });
+      e.target.style.color = 'var(--v)';
+      e.target.style.borderBottom = '2px solid var(--v)';
+      
+      document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
+      document.getElementById(tab + '-tab').classList.add('active');
+      
+      if (tab === 'tours') loadTours();
+      if (tab === 'agencies') loadAgencies();
+    });
+  });
 }
 
+function setupEventListeners() {
+  document.getElementById('agencyForm').addEventListener('submit', saveAgency);
+  document.getElementById('tourForm').addEventListener('submit', saveTour);
 }
 
 // ===== AGENCIAS =====
+async function loadAgencies() {
+  try {
+    const { data, error } = await supabaseClient
+      .from('agencies')
+      .select('*')
+      .order('id', { ascending: false });
+    
+    if (error) throw error;
+    agencies = data || [];
+    renderAgencies();
+    loadAgenciesDropdown();
+  } catch (error) {
+    console.error('Error cargando agencias:', error);
+  }
+}
 
-async function renderHomeAgencies(){
+function renderAgencies() {
+  const list = document.getElementById('agenciesList');
+  
+  if (agencies.length === 0) {
+    list.innerHTML = '<p style="color: var(--ts); font-size: 13px;">No hay agencias aún</p>';
+    return;
+  }
 
-try{
+  list.innerHTML = agencies.map(agency => `
+    <div class="agency-item">
+      <img src="${agency.logo}" alt="${agency.name}" onerror="this.src='https://placehold.co/60x60'">
+      <div class="agency-item-info">
+        <div class="agency-item-name">${agency.name}</div>
+        <div class="agency-item-tours">${agency.state || 'Múltiples estados'}</div>
+      </div>
+      <div style="display: flex; gap: 5px;">
+        <button class="btn-delete" style="padding: 4px 10px; font-size: 11px;" onclick="editAgency(${agency.id})">Editar</button>
+        <button class="btn-delete" onclick="deleteAgency(${agency.id})">Eliminar</button>
+      </div>
+    </div>
+  `).join('');
+}
 
-const { data:agencies, error } = await supabaseClient
-.from('agencies')
-.select('*')
-.order('id', { ascending:false });
+function loadAgenciesDropdown() {
+  const select = document.getElementById('tourAgency');
+  select.innerHTML = '<option value="">Selecciona una agencia</option>';
+  agencies.forEach(agency => {
+    const option = document.createElement('option');
+    option.value = agency.id;
+    option.textContent = agency.name;
+    select.appendChild(option);
+  });
+}
 
-if(error) throw error;
+async function saveAgency(e) {
+  e.preventDefault();
+  
+  const agencyData = {
+    name: document.getElementById('agencyName').value,
+    logo: document.getElementById('agencyLogo').value,
+    cover: document.getElementById('agencyCover').value,
+    description: document.getElementById('agencyDescription').value,
+    whatsapp: document.getElementById('agencyWhatsapp').value,
+    facebook: document.getElementById('agencyFacebook').value,
+  };
 
-const row = document.getElementById('agencyRow');
+  try {
+    if (editingAgencyId) {
+      const { error } = await supabaseClient
+        .from('agencies')
+        .update(agencyData)
+        .eq('id', editingAgencyId);
+      if (error) throw error;
+      console.log('✅ Agencia actualizada');
+    } else {
+      const { error } = await supabaseClient
+        .from('agencies')
+        .insert([agencyData]);
+      if (error) throw error;
+      console.log('✅ Agencia creada');
+    }
+    
+    resetAgencyForm();
+    loadAgencies();
+  } catch (error) {
+    console.error('Error:', error);
+    alert('Error: ' + error.message);
+  }
+}
 
-row.innerHTML = '';
+async function editAgency(id) {
+  const agency = agencies.find(a => a.id === id);
+  if (!agency) return;
+  
+  editingAgencyId = id;
+  document.getElementById('agencyName').value = agency.name;
+  document.getElementById('agencyLogo').value = agency.logo;
+  document.getElementById('agencyCover').value = agency.cover || '';
+  document.getElementById('agencyDescription').value = agency.description || '';
+  document.getElementById('agencyWhatsapp').value = agency.whatsapp || '';
+  document.getElementById('agencyFacebook').value = agency.facebook || '';
+  
+  document.querySelector('[data-tab="agencies"]').click();
+}
 
-agencies.forEach((agency)=>{
+function resetAgencyForm() {
+  document.getElementById('agencyForm').reset();
+  editingAgencyId = null;
+}
 
-const item = document.createElement('div');
+async function deleteAgency(id) {
+  if (!confirm('¿Eliminar esta agencia?')) return;
+  
+  try {
+    const { error } = await supabaseClient
+      .from('agencies')
+      .delete()
+      .eq('id', id);
+    if (error) throw error;
+    console.log('✅ Agencia eliminada');
+    loadAgencies();
+  } catch (error) {
+    console.error('Error:', error);
+    alert('Error: ' + error.message);
+  }
+}
 
-item.className = 'agency-pill';
+// ===== TOURS =====
+async function loadTours() {
+  try {
+    const { data, error } = await supabaseClient
+      .from('tours')
+      .select('*')
+      .order('id', { ascending: false });
+    
+    if (error) throw error;
+    tours = data || [];
+    renderTours();
+  } catch (error) {
+    console.error('Error cargando tours:', error);
+  }
+}
 
-item.innerHTML = `
+function renderTours() {
+  const list = document.getElementById('toursList');
+  
+  if (tours.length === 0) {
+    list.innerHTML = '<p style="color: var(--ts); font-size: 13px;">No hay tours aún</p>';
+    return;
+  }
 
-<div class="ag-avatar">
+  list.innerHTML = tours.map(tour => {
+    const agency = agencies.find(a => a.id === tour.agency_id);
+    return `
+      <div class="agency-item">
+        <img src="${tour.image}" alt="${tour.name}" onerror="this.src='https://placehold.co/60x60'">
+        <div class="agency-item-info">
+          <div class="agency-item-name">${tour.name}</div>
+          <div class="agency-item-tours">${agency?.name || 'Sin agencia'} • $${tour.price} • ${tour.state}</div>
+        </div>
+        <div style="display: flex; gap: 5px;">
+          <button class="btn-delete" style="padding: 4px 10px; font-size: 11px;" onclick="editTour(${tour.id})">Editar</button>
+          <button class="btn-delete" onclick="deleteTour(${tour.id})">Eliminar</button>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
 
-<img
-src="${agency.logo}"
-onerror="this.src='https://placehold.co/100x100'"
->
+async function saveTour(e) {
+  e.preventDefault();
+  
+  const tourData = {
+    name: document.getElementById('tourName').value,
+    agency_id: parseInt(document.getElementById('tourAgency').value),
+    description: document.getElementById('tourDescription').value,
+    image: document.getElementById('tourImage').value,
+    price: parseInt(document.getElementById('tourPrice').value),
+    duration: document.getElementById('tourDuration').value,
+    capacity: parseInt(document.getElementById('tourCapacity').value) || 10,
+    state: document.getElementById('tourState').value,
+    badge: document.getElementById('tourBadge').value,
+    rating: parseFloat(document.getElementById('tourRating').value) || 4.9,
+    reviews: parseInt(document.getElementById('tourReviews').value) || 0,
+    featured: document.getElementById('tourFeatured').checked,
+    coming_soon: document.getElementById('tourComingSoon').checked,
+    visible: document.getElementById('tourVisible').checked,
+  };
 
-</div>
+  try {
+    if (editingTourId) {
+      const { error } = await supabaseClient
+        .from('tours')
+        .update(tourData)
+        .eq('id', editingTourId);
+      if (error) throw error;
+      console.log('✅ Tour actualizado');
+    } else {
+      const { error } = await supabaseClient
+        .from('tours')
+        .insert([tourData]);
+      if (error) throw error;
+      console.log('✅ Tour creado');
+    }
+    
+    resetTourForm();
+    loadTours();
+  } catch (error) {
+    console.error('Error:', error);
+    alert('Error: ' + error.message);
+  }
+}
 
-<div class="ag-name">
-${agency.name}
-</div>
+async function editTour(id) {
+  const tour = tours.find(t => t.id === id);
+  if (!tour) return;
+  
+  editingTourId = id;
+  document.getElementById('tourName').value = tour.name;
+  document.getElementById('tourAgency').value = tour.agency_id;
+  document.getElementById('tourDescription').value = tour.description || '';
+  document.getElementById('tourImage').value = tour.image;
+  document.getElementById('tourPrice').value = tour.price;
+  document.getElementById('tourDuration').value = tour.duration || '';
+  document.getElementById('tourCapacity').value = tour.capacity || 10;
+  document.getElementById('tourState').value = tour.state;
+  document.getElementById('tourBadge').value = tour.badge || '';
+  document.getElementById('tourRating').value = tour.rating || 4.9;
+  document.getElementById('tourReviews').value = tour.reviews || 0;
+  document.getElementById('tourFeatured').checked = tour.featured || false;
+  document.getElementById('tourComingSoon').checked = tour.coming_soon || false;
+  document.getElementById('tourVisible').checked = tour.visible !== false;
+  
+  document.querySelector('[data-tab="tours"]').click();
+}
 
-`;
+function resetTourForm() {
+  document.getElementById('tourForm').reset();
+  editingTourId = null;
+}
 
-row.appendChild(item);
+async function deleteTour(id) {
+  if (!confirm('¿Eliminar este tour?')) return;
+  
+  try {
+    const { error } = await supabaseClient
+      .from('tours')
+      .delete()
+      .eq('id', id);
+    if (error) throw error;
+    console.log('✅ Tour eliminado');
+    loadTours();
+  } catch (error) {
+    console.error('Error:', error);
+    alert('Error: ' + error.message);
+  }
+}
 
+// ===== MODAL CONTROL =====
+function openAdmin() {
+  document.getElementById('adminModal').classList.add('active');
+  loadAgencies();
+  loadTours();
+}
+
+function closeAdmin() {
+  document.getElementById('adminModal').classList.remove('active');
+}
+
+document.getElementById('adminModal').addEventListener('click', (e) => {
+  if (e.target.id === 'adminModal') closeAdmin();
 });
-
-}catch(err){
-
-console.error(err);
-
-}
-
-}
-
-// ===== INIT =====
-
-renderHomeTours();
-renderHomeAgencies();
-
 </script>
 
 </body>
