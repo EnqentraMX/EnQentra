@@ -553,8 +553,8 @@
 </footer>
 
 <!-- ADMIN BUTTON -->
-<button class="admin-btn" id="adminBtn">Admin</button>
-
+<button class="admin-btn" id="adminBtn" style="display:none">Admin</button>
+  
 <!-- ADMIN MODAL -->
 <div class="admin-modal" id="adminModal">
   <div class="admin-content">
@@ -1014,6 +1014,75 @@ function closeAdmin() {
 document.getElementById('adminModal').addEventListener('click', (e) => {
   if (e.target.id === 'adminModal') closeAdmin();
 });
+  // ===== ACTIVAR ADMIN SOLO CON ?admin=true =====
+
+    console.error(err);
+
+  }
+}
+
+
+// ===== RENDER AGENCIAS DINÁMICAS =====
+async function renderHomeAgencies(){
+
+  try {
+
+    const { data:agencies, error } = await supabaseClient
+      .from('agencies')
+      .select('*')
+      .order('id', { ascending:false });
+
+    if(error) throw error;
+
+    const row = document.getElementById('agencyRow');
+
+    if(!row) return;
+
+    row.innerHTML = '';
+
+    agencies.forEach(agency=>{
+
+      const item = document.createElement('div');
+      item.className = 'agency-pill';
+
+      item.innerHTML = `
+
+      <div class="ag-avatar" style="overflow:hidden;padding:0;background:white">
+
+        <img
+          src="${agency.logo}"
+          style="width:100%;height:100%;object-fit:cover"
+          onerror="this.src='https://placehold.co/100x100'"
+        >
+
+      </div>
+
+      <span class="ag-name">
+        ${agency.name}
+      </span>
+
+      <span class="ag-tours">
+        Agencia
+      </span>
+      `;
+
+      row.appendChild(item);
+
+    });
+
+  } catch(err){
+
+    console.error(err);
+
+  }
+}
+
+
+// ===== INICIAR =====
+renderHomeTours();
+renderHomeAgencies();
+
+</script>
 </script>
 
 </body>
