@@ -1,327 +1,386 @@
-```html
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>EnQentraMX</title>
+
+<meta charset="UTF-8" />
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+/>
+
+<title>EnQentraMX</title>
 
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-  <style>
 
-    *{
-      margin:0;
-      padding:0;
-      box-sizing:border-box;
-    }
+<style>
 
-    body{
-      font-family:Arial, Helvetica, sans-serif;
-      background:#081c15;
-      color:white;
-    }
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
 
-    nav{
-      width:100%;
-      padding:20px 40px;
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      background:#0b2a21;
-      position:sticky;
-      top:0;
-      z-index:999;
-    }
+body{
+  font-family:Arial, Helvetica, sans-serif;
+  background:#081c15;
+  color:white;
+}
 
-    .logo{
-      font-size:32px;
-      font-weight:bold;
-      color:white;
-      cursor:pointer;
-    }
+nav{
+  width:100%;
+  padding:20px 40px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  background:#0b2a21;
+  position:sticky;
+  top:0;
+  z-index:999;
+}
 
-    .logo span{
-      color:#d4af37;
-    }
+.logo{
+  font-size:32px;
+  font-weight:bold;
+  cursor:pointer;
+}
 
-    .menu{
-      display:flex;
-      gap:20px;
-      align-items:center;
-    }
+.logo span{
+  color:#d4af37;
+}
 
-    .menu a{
-      color:white;
-      text-decoration:none;
-      cursor:pointer;
-    }
+.menu{
+  display:flex;
+  gap:20px;
+}
 
-    .hero{
-      padding:80px 20px;
-      text-align:center;
-      background:linear-gradient(180deg,#0b2a21,#14532d);
-    }
+.menu a{
+  color:white;
+  text-decoration:none;
+  cursor:pointer;
+}
 
-    .hero h1{
-      font-size:60px;
-      margin-bottom:20px;
-    }
+.hero{
+  padding:100px 20px;
+  text-align:center;
+  background:linear-gradient(
+    180deg,
+    #0b2a21,
+    #14532d
+  );
+}
 
-    .hero h1 span{
-      color:#d4af37;
-      font-style:italic;
-    }
+.hero h1{
+  font-size:58px;
+  margin-bottom:20px;
+}
 
-    .hero p{
-      max-width:700px;
-      margin:auto;
-      font-size:18px;
-      opacity:.8;
-    }
+.hero h1 span{
+  color:#d4af37;
+}
 
-    .container{
-      width:90%;
-      max-width:1200px;
-      margin:auto;
-    }
+.hero p{
+  max-width:700px;
+  margin:auto;
+  font-size:18px;
+  opacity:.85;
+}
 
-    .section-title{
-      font-size:36px;
-      margin-bottom:30px;
-    }
+.container{
+  width:90%;
+  max-width:1200px;
+  margin:auto;
+}
 
-    .tours-grid{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
-      gap:20px;
-      margin-top:40px;
-      margin-bottom:80px;
-    }
+.section-title{
+  font-size:36px;
+  margin:60px 0 30px;
+}
 
-    .tour-card{
-      background:white;
-      color:black;
-      border-radius:14px;
-      overflow:hidden;
-      cursor:pointer;
-    }
+.tours-grid{
+  display:grid;
+  grid-template-columns:
+    repeat(auto-fit,minmax(300px,1fr));
+  gap:20px;
+  margin-bottom:80px;
+}
 
-    .tour-card img{
-      width:100%;
-      height:220px;
-      object-fit:cover;
-    }
+.tour-card{
+  background:white;
+  color:black;
+  border-radius:18px;
+  overflow:hidden;
+  cursor:pointer;
+  transition:.2s;
+}
 
-    .tour-content{
-      padding:20px;
-    }
+.tour-card:hover{
+  transform:translateY(-5px);
+}
 
-    .tour-content h3{
-      margin-bottom:10px;
-    }
+.tour-card img{
+  width:100%;
+  height:220px;
+  object-fit:cover;
+  background:#ddd;
+}
 
-    .price{
-      font-size:24px;
-      font-weight:bold;
-      color:#14532d;
-      margin-top:10px;
-    }
+.tour-content{
+  padding:20px;
+}
 
-    .btn{
-      margin-top:15px;
-      background:#14532d;
-      color:white;
-      border:none;
-      padding:12px 20px;
-      border-radius:10px;
-      cursor:pointer;
-    }
+.tour-content h3{
+  margin-bottom:10px;
+}
 
-    .section{
-      display:none;
-    }
+.agency-label{
+  color:#14532d;
+  font-weight:bold;
+  margin-bottom:10px;
+}
 
-    .active{
-      display:block;
-    }
+.price{
+  font-size:26px;
+  font-weight:bold;
+  color:#14532d;
+  margin-top:15px;
+}
 
-    .agency-header{
-      padding:60px 20px;
-      background:#14532d;
-    }
+.btn{
+  margin-top:15px;
+  border:none;
+  background:#14532d;
+  color:white;
+  padding:12px 18px;
+  border-radius:10px;
+  cursor:pointer;
+}
 
-    .agency-header h1{
-      font-size:48px;
-      margin-bottom:10px;
-    }
+.section{
+  display:none;
+}
 
-    .admin-panel{
-      padding:40px 20px;
-    }
+.active{
+  display:block;
+}
 
-    .admin-box{
-      background:white;
-      color:black;
-      padding:20px;
-      border-radius:14px;
-      margin-bottom:20px;
-    }
+.agency-header{
+  background:#14532d;
+  padding:80px 20px;
+}
 
-    input,
-    textarea,
-    select{
-      width:100%;
-      padding:14px;
-      margin-top:10px;
-      margin-bottom:20px;
-      border-radius:10px;
-      border:1px solid #ccc;
-    }
+.agency-header h1{
+  font-size:52px;
+  margin-bottom:10px;
+}
 
-  </style>
+.admin-panel{
+  padding:40px 20px;
+}
+
+.admin-box{
+  background:white;
+  color:black;
+  border-radius:16px;
+  padding:20px;
+  margin-bottom:30px;
+}
+
+input,
+textarea,
+select{
+  width:100%;
+  padding:14px;
+  border-radius:10px;
+  border:1px solid #ccc;
+  margin-top:10px;
+  margin-bottom:20px;
+}
+
+</style>
+
 </head>
+
 <body>
 
 <nav>
 
-  <div class="logo" onclick="goHome()">
-    EnQentra<span>MX</span>
-  </div>
+<div
+  class="logo"
+  onclick="goHome()"
+>
+  EnQentra<span>MX</span>
+</div>
 
-  <div class="menu">
-    <a onclick="goHome()">Inicio</a>
-  </div>
+<div class="menu">
+
+  <a onclick="goHome()">
+    Inicio
+  </a>
+
+</div>
 
 </nav>
 
+
+
 <!-- HOME -->
 
-<div id="home" class="section active">
+<div
+  id="home"
+  class="section active"
+>
 
-  <div class="hero">
+<div class="hero">
 
-    <h1>
-      Descubre <span>tours auténticos</span> en México
-    </h1>
+  <h1>
+    Descubre
+    <span>tours auténticos</span>
+  </h1>
 
-    <p>
-      Conecta con agencias reales y descubre experiencias increíbles.
-    </p>
-
-  </div>
-
-  <div class="container" style="padding-top:60px;">
-
-    <h2 class="section-title">
-      Tours destacados
-    </h2>
-
-    <div class="tours-grid" id="toursGrid"></div>
-
-  </div>
+  <p>
+    Conecta con agencias reales y descubre
+    experiencias increíbles en México.
+  </p>
 
 </div>
+
+<div class="container">
+
+  <h2 class="section-title">
+    Tours destacados
+  </h2>
+
+  <div
+    class="tours-grid"
+    id="toursGrid"
+  ></div>
+
+</div>
+
+</div>
+
+
 
 <!-- AGENCY -->
 
-<div id="agencyPage" class="section">
+<div
+  id="agencyPage"
+  class="section"
+>
 
-  <div class="agency-header">
+<div class="agency-header">
 
-    <div class="container">
+  <div class="container">
 
-      <h1 id="agencyName"></h1>
+    <h1 id="agencyName"></h1>
 
-      <p id="agencyDesc"></p>
-
-    </div>
-
-  </div>
-
-  <div class="container" style="padding-top:40px;">
-
-    <div class="tours-grid" id="agencyTours"></div>
+    <p id="agencyDesc"></p>
 
   </div>
 
 </div>
+
+<div class="container">
+
+  <div
+    class="tours-grid"
+    id="agencyTours"
+    style="margin-top:40px;"
+  ></div>
+
+</div>
+
+</div>
+
+
 
 <!-- ADMIN -->
 
-<div id="adminPanel" class="section">
+<div
+  id="adminPanel"
+  class="section"
+>
 
-  <div class="container admin-panel">
+<div class="container admin-panel">
 
-    <div class="admin-box">
+  <div class="admin-box">
 
-      <h2>Crear Agencia</h2>
+    <h2>Crear Agencia</h2>
 
-      <input
-        type="text"
-        id="agencyNameInput"
-        placeholder="Nombre"
-      />
+    <input
+      type="text"
+      id="agencyNameInput"
+      placeholder="Nombre agencia"
+    />
 
-      <textarea
-        id="agencyDescInput"
-        placeholder="Descripción"
-      ></textarea>
+    <textarea
+      id="agencyDescInput"
+      placeholder="Descripción"
+    ></textarea>
 
-      <button
-        class="btn"
-        onclick="createAgency()"
-      >
-        Crear Agencia
-      </button>
+    <button
+      class="btn"
+      onclick="createAgency()"
+    >
+      Crear Agencia
+    </button>
 
-    </div>
+  </div>
 
-    <div class="admin-box">
 
-      <h2>Crear Tour</h2>
 
-      <select id="tourAgency"></select>
+  <div class="admin-box">
 
-      <input
-        type="text"
-        id="tourName"
-        placeholder="Nombre tour"
-      />
+    <h2>Crear Tour</h2>
 
-      <input
-        type="text"
-        id="tourImage"
-        placeholder="URL imagen"
-      />
+    <select id="tourAgency"></select>
 
-      <input
-        type="number"
-        id="tourPrice"
-        placeholder="Precio"
-      />
+    <input
+      type="text"
+      id="tourName"
+      placeholder="Nombre tour"
+    />
 
-      <button
-        class="btn"
-        onclick="createTour()"
-      >
-        Crear Tour
-      </button>
+    <input
+      type="text"
+      id="tourImage"
+      placeholder="URL imagen"
+    />
 
-    </div>
+    <input
+      type="number"
+      id="tourPrice"
+      placeholder="Precio"
+    />
+
+    <button
+      class="btn"
+      onclick="createTour()"
+    >
+      Crear Tour
+    </button>
 
   </div>
 
 </div>
+
+</div>
+
+
 
 <script>
 
 const SUPABASE_URL =
-  'https://iaemzeidkyxayhsiunmt.supabase.co';
+'https://iaemzeidkyxayhsiunmt.supabase.co';
 
 const SUPABASE_KEY =
-  'sb_publishable_ueHRY8Ev4QO_tF8xc6voRg_boBBXWUR';
+'sb_publishable_ueHRY8Ev4QO_tF8xc6voRg_boBBXWUR';
 
-const supabaseClient = supabase.createClient(
+const { createClient } = supabase;
+
+const supabaseClient = createClient(
   SUPABASE_URL,
   SUPABASE_KEY
 );
@@ -330,17 +389,33 @@ console.log('SUPABASE CONECTADO');
 
 let agencies = {};
 
-function goHome(){
 
-  document.querySelectorAll('.section').forEach(sec=>{
-    sec.classList.remove('active');
-  });
 
-  document.getElementById('home')
+function showSection(id){
+
+  document
+    .querySelectorAll('.section')
+    .forEach(section=>{
+      section.classList.remove('active');
+    });
+
+  document
+    .getElementById(id)
     .classList.add('active');
 
-  loadHome();
 }
+
+
+
+function goHome(){
+
+  showSection('home');
+
+  loadHome();
+
+}
+
+
 
 function openAgency(slug){
 
@@ -348,18 +423,16 @@ function openAgency(slug){
 
   if(!agency) return;
 
-  document.querySelectorAll('.section').forEach(sec=>{
-    sec.classList.remove('active');
-  });
+  showSection('agencyPage');
 
-  document.getElementById('agencyPage')
-    .classList.add('active');
-
-  document.getElementById('agencyName')
+  document
+    .getElementById('agencyName')
     .textContent = agency.name;
 
-  document.getElementById('agencyDesc')
-    .textContent = agency.description;
+  document
+    .getElementById('agencyDesc')
+    .textContent =
+      agency.description || '';
 
   const grid =
     document.getElementById('agencyTours');
@@ -369,9 +442,12 @@ function openAgency(slug){
   agency.tours.forEach(tour=>{
 
     grid.innerHTML += `
+
       <div class="tour-card">
 
-        <img src="${tour.image}">
+        <img
+          src="${tour.image}"
+        >
 
         <div class="tour-content">
 
@@ -384,11 +460,14 @@ function openAgency(slug){
         </div>
 
       </div>
+
     `;
 
   });
 
 }
+
+
 
 function loadHome(){
 
@@ -410,13 +489,17 @@ function loadHome(){
           onclick="openAgency('${slug}')"
         >
 
-          <img src="${tour.image}">
+          <img
+            src="${tour.image}"
+          >
 
           <div class="tour-content">
 
-            <h3>${tour.name}</h3>
+            <p class="agency-label">
+              ${agency.name}
+            </p>
 
-            <p>${agency.name}</p>
+            <h3>${tour.name}</h3>
 
             <div class="price">
               $${tour.price}
@@ -438,6 +521,8 @@ function loadHome(){
 
 }
 
+
+
 function updateAgencySelect(){
 
   const select =
@@ -448,27 +533,45 @@ function updateAgencySelect(){
   Object.keys(agencies).forEach(slug=>{
 
     select.innerHTML += `
+
       <option value="${slug}">
         ${agencies[slug].name}
       </option>
+
     `;
 
   });
 
 }
 
+
+
 async function createAgency(){
 
   const name =
-    document.getElementById('agencyNameInput').value;
+    document
+      .getElementById('agencyNameInput')
+      .value
+      .trim();
 
   const desc =
-    document.getElementById('agencyDescInput').value;
+    document
+      .getElementById('agencyDescInput')
+      .value
+      .trim();
+
+  if(!name){
+
+    alert('Ingresa nombre');
+
+    return;
+  }
 
   const slug =
     name
       .toLowerCase()
-      .replace(/\s/g,'');
+      .replace(/\s+/g,'')
+      .replace(/[^a-z0-9]/g,'');
 
   const { error } =
     await supabaseClient
@@ -493,23 +596,43 @@ async function createAgency(){
   alert('Agencia creada');
 
   await loadAgencies();
+
 }
+
+
 
 async function createTour(){
 
   const slug =
-    document.getElementById('tourAgency').value;
+    document
+      .getElementById('tourAgency')
+      .value;
 
   const name =
-    document.getElementById('tourName').value;
+    document
+      .getElementById('tourName')
+      .value
+      .trim();
 
   const image =
-    document.getElementById('tourImage').value;
+    document
+      .getElementById('tourImage')
+      .value
+      .trim();
 
   const price =
     parseInt(
-      document.getElementById('tourPrice').value
+      document
+        .getElementById('tourPrice')
+        .value
     );
+
+  if(!slug || !name){
+
+    alert('Completa datos');
+
+    return;
+  }
 
   const { error } =
     await supabaseClient
@@ -535,26 +658,41 @@ async function createTour(){
   alert('Tour creado');
 
   await loadAgencies();
+
 }
+
+
 
 async function loadAgencies(){
 
-  const { data: agenciesData, error: agenciesError } =
-    await supabaseClient
-      .from('agencies')
-      .select('*');
+  const {
+    data: agenciesData,
+    error: agenciesError
+  } =
+  await supabaseClient
+    .from('agencies')
+    .select('*');
 
-  const { data: toursData, error: toursError } =
-    await supabaseClient
-      .from('tours')
-      .select('*');
+  const {
+    data: toursData,
+    error: toursError
+  } =
+  await supabaseClient
+    .from('tours')
+    .select('*');
 
   console.log(agenciesData);
   console.log(toursData);
 
-  if(agenciesError || toursError){
+  if(agenciesError){
 
     console.log(agenciesError);
+
+    return;
+  }
+
+  if(toursError){
+
     console.log(toursError);
 
     return;
@@ -568,11 +706,13 @@ async function loadAgencies(){
 
       name:agency.name,
 
-      description:agency.description,
+      description:
+        agency.description || '',
 
-      tours:toursData.filter(
-        t => t.agency_slug === agency.slug
-      )
+      tours:
+        toursData.filter(
+          t => t.agency_slug === agency.slug
+        )
 
     };
 
@@ -581,27 +721,33 @@ async function loadAgencies(){
   updateAgencySelect();
 
   loadHome();
+
 }
 
-window.addEventListener('keydown', function(e){
 
-  if(e.ctrlKey && e.key === 'm'){
 
-    document.querySelectorAll('.section').forEach(sec=>{
-      sec.classList.remove('active');
-    });
+window.addEventListener(
+  'keydown',
+  function(e){
 
-    document.getElementById('adminPanel')
-      .classList.add('active');
+    if(
+      e.ctrlKey &&
+      e.key === 'm'
+    ){
+
+      showSection('adminPanel');
+
+    }
 
   }
+);
 
-});
+
 
 loadAgencies();
 
 </script>
 
 </body>
+
 </html>
-```
